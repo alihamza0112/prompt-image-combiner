@@ -113,6 +113,19 @@ function GradientBlob({ className }: { className?: string }) {
   return <div className={`pointer-events-none absolute rounded-full blur-3xl opacity-60 ${className}`} />;
 }
 
+type HistoryItem = {
+  id: string;
+  category: string;
+  goal: string;
+  tone: string;
+  length: Length;
+  prompt: string;
+  createdAt: number;
+};
+
+const HISTORY_KEY = "pc-prompt-history";
+const HISTORY_MAX = 20;
+
 export default function LandingPage({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   const [category, setCategory] = useState("ChatGPT");
   const [goal, setGoal] = useState("");
@@ -120,6 +133,31 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
   const [length, setLength] = useState<Length>("Medium");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (raw) setHistory(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  const persistHistory = (items: HistoryItem[]) => {
+    setHistory(items);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(items));
+    } catch {}
+  };
+
+  const addToHistory = (item: Omit<HistoryItem, "id" | "createdAt">) => {
+    const entry: HistoryItem = {
+      ...item,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      createdAt: Date.now(),
+    };
+    const deduped = history.filter((h) => h.prompt !== entry.prompt);
+    persistHistory([entry, ...deduped].slice(0, HISTORY_MAX));
+  };
 
   const generate = () => {
     if (!goal.trim()) {
@@ -128,7 +166,9 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
     }
     setLoading(true);
     setTimeout(() => {
-      setResult(buildPrompt(category, goal, tone, length));
+      const prompt = buildPrompt(category, goal, tone, length);
+      setResult(prompt);
+      addToHistory({ category, goal, tone, length, prompt });
       setLoading(false);
       toast.success("Prompt generated");
     }, 700);
@@ -143,6 +183,25 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
     }
   };
 
+  const reuseHistoryItem = (h: HistoryItem) => {
+    setCategory(h.category);
+    setGoal(h.goal);
+    setTone(h.tone);
+    setLength(h.length);
+    setResult(h.prompt);
+    document.getElementById("generator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    toast.success("Loaded from history");
+  };
+
+  const deleteHistoryItem = (id: string) => {
+    persistHistory(history.filter((h) => h.id !== id));
+  };
+
+  const clearHistory = () => {
+    persistHistory([]);
+    toast.success("History cleared");
+  };
+
   const useTemplate = (t: (typeof TEMPLATES)[number]) => {
     setCategory(t.category);
     setGoal(t.goal);
@@ -150,6 +209,7 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
     setLength("Medium");
     const prompt = buildPrompt(t.category, t.goal, "Professional", "Medium");
     setResult(prompt);
+    addToHistory({ category: t.category, goal: t.goal, tone: "Professional", length: "Medium", prompt });
     document.getElementById("generator")?.scrollIntoView({ behavior: "smooth", block: "start" });
     toast.success(`Loaded: ${t.title}`);
   };
