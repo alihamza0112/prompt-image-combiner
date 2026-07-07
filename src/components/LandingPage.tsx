@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster, toast } from "sonner";
 import {
   Sparkles, Copy, RefreshCw, Trash2, Zap, Bot, ClipboardCheck, Target,
   Smartphone, Lock, Moon, Sun, Youtube, PenLine, Search, Megaphone,
   FileText, Linkedin, Instagram, Mail, Code2, Palette, Briefcase,
-  ChevronDown, ArrowRight, Wand2, Check, Star,
+  ChevronDown, ArrowRight, Wand2, Check, Star, History, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -113,6 +113,19 @@ function GradientBlob({ className }: { className?: string }) {
   return <div className={`pointer-events-none absolute rounded-full blur-3xl opacity-60 ${className}`} />;
 }
 
+type HistoryItem = {
+  id: string;
+  category: string;
+  goal: string;
+  tone: string;
+  length: Length;
+  prompt: string;
+  createdAt: number;
+};
+
+const HISTORY_KEY = "pc-prompt-history";
+const HISTORY_MAX = 20;
+
 export default function LandingPage({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   const [category, setCategory] = useState("ChatGPT");
   const [goal, setGoal] = useState("");
@@ -120,6 +133,31 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
   const [length, setLength] = useState<Length>("Medium");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      if (raw) setHistory(JSON.parse(raw));
+    } catch {}
+  }, []);
+
+  const persistHistory = (items: HistoryItem[]) => {
+    setHistory(items);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(items));
+    } catch {}
+  };
+
+  const addToHistory = (item: Omit<HistoryItem, "id" | "createdAt">) => {
+    const entry: HistoryItem = {
+      ...item,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      createdAt: Date.now(),
+    };
+    const deduped = history.filter((h) => h.prompt !== entry.prompt);
+    persistHistory([entry, ...deduped].slice(0, HISTORY_MAX));
+  };
 
   const generate = () => {
     if (!goal.trim()) {
@@ -128,7 +166,9 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
     }
     setLoading(true);
     setTimeout(() => {
-      setResult(buildPrompt(category, goal, tone, length));
+      const prompt = buildPrompt(category, goal, tone, length);
+      setResult(prompt);
+      addToHistory({ category, goal, tone, length, prompt });
       setLoading(false);
       toast.success("Prompt generated");
     }, 700);
@@ -143,6 +183,25 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
     }
   };
 
+  const reuseHistoryItem = (h: HistoryItem) => {
+    setCategory(h.category);
+    setGoal(h.goal);
+    setTone(h.tone);
+    setLength(h.length);
+    setResult(h.prompt);
+    document.getElementById("generator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    toast.success("Loaded from history");
+  };
+
+  const deleteHistoryItem = (id: string) => {
+    persistHistory(history.filter((h) => h.id !== id));
+  };
+
+  const clearHistory = () => {
+    persistHistory([]);
+    toast.success("History cleared");
+  };
+
   const useTemplate = (t: (typeof TEMPLATES)[number]) => {
     setCategory(t.category);
     setGoal(t.goal);
@@ -150,6 +209,7 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
     setLength("Medium");
     const prompt = buildPrompt(t.category, t.goal, "Professional", "Medium");
     setResult(prompt);
+    addToHistory({ category: t.category, goal: t.goal, tone: "Professional", length: "Medium", prompt });
     document.getElementById("generator")?.scrollIntoView({ behavior: "smooth", block: "start" });
     toast.success(`Loaded: ${t.title}`);
   };
@@ -171,6 +231,7 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
             {[
               ["Generator", "generator"],
               ["Templates", "templates"],
+              ["History", "history"],
               ["Features", "features"],
               ["How it works", "how"],
               ["FAQ", "faq"],
@@ -370,8 +431,89 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
         </div>
       </section>
 
+      {/* History */}
+      <section id="history" className="relative py-20 sm:py-28">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <SectionHead
+            eyebrow="Prompt History"
+            title="Your recent prompts"
+            subtitle="Saved locally in your browser. Reuse or copy any prompt with one tap — nothing is sent to a server."
+          />
+          <div className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <History className="h-4 w-4" />
+                <span>
+                  {history.length} saved{history.length === 1 ? " prompt" : " prompts"}
+                  {history.length >= HISTORY_MAX ? ` (max ${HISTORY_MAX})` : ""}
+                </span>
+              </div>
+              {history.length > 0 && (
+                <Button size="sm" variant="ghost" onClick={clearHistory}>
+                  <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear all
+                </Button>
+              )}
+            </div>
+
+            {history.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border bg-background/40 p-10 text-center">
+                <div className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-xl bg-gradient-soft">
+                  <History className="h-5 w-5 text-[color:var(--brand)]" />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  No prompts yet. Generate one above and it'll appear here.
+                </p>
+              </div>
+            ) : (
+              <ul className="space-y-3">
+                <AnimatePresence initial={false}>
+                  {history.map((h) => (
+                    <motion.li
+                      key={h.id}
+                      layout
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="rounded-xl border border-border bg-background/50 p-4"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <span className="rounded-full bg-gradient-brand px-2 py-0.5 font-medium text-white">
+                            {h.category}
+                          </span>
+                          <span className="text-muted-foreground">{h.tone} · {h.length}</span>
+                          <span className="text-muted-foreground">·</span>
+                          <span className="text-muted-foreground">
+                            {new Date(h.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="mt-2 truncate text-sm font-medium text-foreground">{h.goal}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{h.prompt}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={() => reuseHistoryItem(h)}>
+                          <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Reuse
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => copy(h.prompt)}>
+                          <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => deleteHistoryItem(h.id)}>
+                          <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete
+                        </Button>
+                      </div>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Templates */}
       <section id="templates" className="relative py-20 sm:py-28">
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHead
             eyebrow="Prompt Templates"
