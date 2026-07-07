@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster, toast } from "sonner";
 import {
   Sparkles, Copy, RefreshCw, Trash2, Zap, Bot, ClipboardCheck, Target,
   Smartphone, Lock, Moon, Sun, Youtube, PenLine, Search, Megaphone,
   FileText, Linkedin, Instagram, Mail, Code2, Palette, Briefcase,
-  ChevronDown, ArrowRight, Wand2, Check, Star,
+  ChevronDown, ArrowRight, Wand2, Check, Star, History, RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
