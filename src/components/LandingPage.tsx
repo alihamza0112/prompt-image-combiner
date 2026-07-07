@@ -231,6 +231,7 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
             {[
               ["Generator", "generator"],
               ["Templates", "templates"],
+              ["History", "history"],
               ["Features", "features"],
               ["How it works", "how"],
               ["FAQ", "faq"],
