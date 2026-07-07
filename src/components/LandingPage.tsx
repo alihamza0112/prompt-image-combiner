@@ -430,8 +430,89 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
         </div>
       </section>
 
+      {/* History */}
+      <section id="history" className="relative py-20 sm:py-28">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <SectionHead
+            eyebrow="Prompt History"
+            title="Your recent prompts"
+            subtitle="Saved locally in your browser. Reuse or copy any prompt with one tap — nothing is sent to a server."
+          />
+          <div className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <History className="h-4 w-4" />
+                <span>
+                  {history.length} saved{history.length === 1 ? " prompt" : " prompts"}
+                  {history.length >= HISTORY_MAX ? ` (max ${HISTORY_MAX})` : ""}
+                </span>
+              </div>
+              {history.length > 0 && (
+                <Button size="sm" variant="ghost" onClick={clearHistory}>
+                  <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear all
+                </Button>
+              )}
+            </div>
+
+            {history.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border bg-background/40 p-10 text-center">
+                <div className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-xl bg-gradient-soft">
+                  <History className="h-5 w-5 text-[color:var(--brand)]" />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  No prompts yet. Generate one above and it'll appear here.
+                </p>
+              </div>
+            ) : (
+              <ul className="space-y-3">
+                <AnimatePresence initial={false}>
+                  {history.map((h) => (
+                    <motion.li
+                      key={h.id}
+                      layout
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="rounded-xl border border-border bg-background/50 p-4"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <span className="rounded-full bg-gradient-brand px-2 py-0.5 font-medium text-white">
+                            {h.category}
+                          </span>
+                          <span className="text-muted-foreground">{h.tone} · {h.length}</span>
+                          <span className="text-muted-foreground">·</span>
+                          <span className="text-muted-foreground">
+                            {new Date(h.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="mt-2 truncate text-sm font-medium text-foreground">{h.goal}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{h.prompt}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={() => reuseHistoryItem(h)}>
+                          <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Reuse
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => copy(h.prompt)}>
+                          <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => deleteHistoryItem(h.id)}>
+                          <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete
+                        </Button>
+                      </div>
+                    </motion.li>
+                  ))}
+                </AnimatePresence>
+              </ul>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Templates */}
       <section id="templates" className="relative py-20 sm:py-28">
+
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHead
             eyebrow="Prompt Templates"
