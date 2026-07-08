@@ -358,7 +358,6 @@ function ImageCombinerPage() {
   const copyImage = async () => {
     if (!resultBlob) return toast.error("Merge first.");
     try {
-      // @ts-expect-error ClipboardItem typing
       await navigator.clipboard.write([new ClipboardItem({ [resultBlob.type]: resultBlob })]);
       toast.success("Image copied to clipboard");
     } catch {

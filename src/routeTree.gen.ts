@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ImageCombinerRouteImport } from './routes/image-combiner'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImageCombinerRoute = ImageCombinerRouteImport.update({
+  id: '/image-combiner',
+  path: '/image-combiner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml'
+  fullPaths: '/' | '/image-combiner' | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml'
-  id: '__root__' | '/' | '/sitemap.xml'
+  to: '/' | '/image-combiner' | '/sitemap.xml'
+  id: '__root__' | '/' | '/image-combiner' | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ImageCombinerRoute: typeof ImageCombinerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/image-combiner': {
+      id: '/image-combiner'
+      path: '/image-combiner'
+      fullPath: '/image-combiner'
+      preLoaderRoute: typeof ImageCombinerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,18 +87,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ImageCombinerRoute: ImageCombinerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
