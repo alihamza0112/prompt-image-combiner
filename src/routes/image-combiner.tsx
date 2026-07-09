@@ -401,10 +401,9 @@ function ImageCombinerPage() {
             >
               Image Combiner
             </Link>
-            <Link to="/" hash="features" className="text-muted-foreground hover:text-foreground transition">
-              Features
+            <Link to="/voice-to-text" className="text-muted-foreground hover:text-foreground transition">
+              AI Voice to Text
             </Link>
-            <a href="#faq" className="text-muted-foreground hover:text-foreground transition">FAQ</a>
             <Link to="/" hash="contact" className="text-muted-foreground hover:text-foreground transition">
               Contact
             </Link>
@@ -465,20 +464,12 @@ function ImageCombinerPage() {
                   <Images className="h-4 w-4" /> Image Combiner
                 </Link>
                 <Link
-                  to="/"
-                  hash="features"
+                  to="/voice-to-text"
                   onClick={() => setMobileNavOpen(false)}
                   className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
                 >
-                  Features
+                  AI Voice to Text
                 </Link>
-                <a
-                  href="#faq"
-                  onClick={() => setMobileNavOpen(false)}
-                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
-                >
-                  FAQ
-                </a>
                 <Link
                   to="/"
                   hash="contact"
