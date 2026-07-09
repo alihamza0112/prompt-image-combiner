@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster, toast } from "sonner";
 import {
@@ -6,7 +7,9 @@ import {
   Smartphone, Lock, Moon, Sun, Youtube, PenLine, Search, Megaphone,
   FileText, Linkedin, Instagram, Mail, Code2, Palette, Briefcase,
   ChevronDown, ArrowRight, Wand2, Check, Star, History, RotateCcw,
+  Menu, X, Images,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -134,6 +137,8 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
 
   useEffect(() => {
     try {
@@ -227,19 +232,28 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
             </div>
             <span className="text-base font-semibold tracking-tight">PromptCraft AI</span>
           </a>
-          <nav className="hidden items-center gap-8 md:flex">
-            {[
-              ["Generator", "generator"],
-              ["Templates", "templates"],
-              ["History", "history"],
-              ["Features", "features"],
-              ["How it works", "how"],
-              ["FAQ", "faq"],
-            ].map(([label, id]) => (
-              <a key={id} href={`#${id}`} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                {label}
-              </a>
-            ))}
+          <nav className="hidden items-center gap-7 md:flex">
+            <a href="#top" aria-current="page" className="text-sm font-medium text-foreground transition-colors">
+              Home
+            </a>
+            <a href="#generator" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              AI Prompt Generator
+            </a>
+            <Link
+              to="/image-combiner"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Image Combiner
+            </Link>
+            <a href="#features" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              Features
+            </a>
+            <a href="#faq" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              FAQ
+            </a>
+            <a href="#contact" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              Contact
+            </a>
           </nav>
           <div className="flex items-center gap-2">
             <button
@@ -249,12 +263,58 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
             >
               {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <Button asChild size="sm" className="bg-gradient-brand text-white shadow-glow hover:opacity-95">
+            <Button asChild size="sm" className="hidden bg-gradient-brand text-white shadow-glow hover:opacity-95 sm:inline-flex">
               <a href="#generator">Try Free</a>
             </Button>
+            <button
+              aria-label="Toggle menu"
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((v) => !v)}
+              className="grid h-9 w-9 place-items-center rounded-lg border border-border transition-colors hover:bg-accent md:hidden"
+            >
+              {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
           </div>
         </div>
+        <AnimatePresence>
+          {mobileNavOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden border-t border-border/60 bg-background/95 backdrop-blur-xl md:hidden"
+            >
+              <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6">
+                {[
+                  { label: "Home", href: "#top" },
+                  { label: "AI Prompt Generator", href: "#generator" },
+                  { label: "Features", href: "#features" },
+                  { label: "FAQ", href: "#faq" },
+                  { label: "Contact", href: "#contact" },
+                ].map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileNavOpen(false)}
+                    className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <Link
+                  to="/image-combiner"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                >
+                  <Images className="h-4 w-4" /> Image Combiner
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
+
 
       {/* Hero */}
       <section id="top" className="relative overflow-hidden pt-16 pb-24 sm:pt-24 sm:pb-32">
@@ -684,7 +744,7 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-10">
+      <footer id="contact" className="border-t border-border py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <div className="grid h-7 w-7 place-items-center rounded-md bg-gradient-brand">
