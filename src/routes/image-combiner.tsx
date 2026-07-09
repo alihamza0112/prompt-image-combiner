@@ -6,8 +6,9 @@ import {
   Sparkles, Upload, Trash2, Download, Copy, RotateCcw, Image as ImageIcon,
   Lock, Moon, Sun, GripVertical, Layers, Wand2, Check, ArrowRight,
   MessageSquare, BookOpen, GraduationCap, BookMarked, Newspaper, FileText,
-  ShoppingBag, Share2, ChevronDown,
+  ShoppingBag, Share2, ChevronDown, Menu, X, Images,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
