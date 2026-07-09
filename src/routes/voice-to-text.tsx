@@ -298,6 +298,34 @@ function VoiceToTextPage() {
             </div>
           )}
 
+          {/* Iframe / permission-blocked notice */}
+          {supported !== false && (permissionBlocked || inIframe) && (
+            <div className="mt-6 flex flex-col gap-3 rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-200 sm:flex-row sm:items-start">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              <div className="flex-1">
+                <p className="font-medium text-amber-100">
+                  {permissionBlocked ? "Microphone access is blocked." : "Preview iframe may block the microphone."}
+                </p>
+                <p className="mt-1 text-amber-200/90">
+                  {inIframe
+                    ? "This page is running inside a preview frame that doesn't grant microphone access. Open the site in a new tab, then allow the mic when your browser asks."
+                    : "Click the lock icon in your address bar, allow microphone for this site, then reload."}
+                </p>
+              </div>
+              {inIframe && (
+                <a
+                  href={typeof window !== "undefined" ? window.location.href : "/voice-to-text"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex shrink-0 items-center justify-center rounded-md bg-amber-400/20 px-3 py-1.5 text-xs font-medium text-amber-100 ring-1 ring-inset ring-amber-400/40 transition-colors hover:bg-amber-400/30"
+                >
+                  Open in new tab
+                </a>
+              )}
+            </div>
+          )}
+
+
           {/* Transcript */}
           <div className="mt-6">
             <Label htmlFor="transcript" className="text-xs uppercase tracking-wider text-muted-foreground">
