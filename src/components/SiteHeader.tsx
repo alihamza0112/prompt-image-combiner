@@ -32,11 +32,12 @@ export default function SiteHeader() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand animate-logo-float animate-logo-glow">
-            <Sparkles className="h-4 w-4 text-white transition-transform duration-300 group-hover:rotate-12" />
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand animate-logo-float animate-logo-glow transition-transform duration-500 group-hover:rotate-6">
+            <AixoLogo className="h-5 w-5" />
           </span>
           <span className="text-base font-semibold tracking-tight">AIXO</span>
         </Link>
+
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV_ITEMS.map((item) => (
