@@ -52,14 +52,8 @@ export default function SiteHeader() {
               <span className="relative z-10">{item.label}</span>
             </Link>
           ))}
-          <Link
-            to="/"
-            hash="contact"
-            className="rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Contact
-          </Link>
         </nav>
+
 
         <button
           aria-label="Toggle menu"
