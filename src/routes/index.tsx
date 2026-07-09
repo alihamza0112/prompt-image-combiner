@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import LandingPage from "@/components/LandingPage";
 
 export const Route = createFileRoute("/")({
@@ -48,22 +47,5 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    const stored = typeof window !== "undefined" ? localStorage.getItem("pc-theme") : null;
-    const prefersDark =
-      typeof window !== "undefined" && window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-    setDark(stored ? stored === "dark" : !!prefersDark);
-  }, []);
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    document.documentElement.classList.toggle("dark", dark);
-    try {
-      localStorage.setItem("pc-theme", dark ? "dark" : "light");
-    } catch {}
-  }, [dark]);
-
-  return <LandingPage dark={dark} setDark={setDark} />;
+  return <LandingPage />;
 }
