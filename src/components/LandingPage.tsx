@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster, toast } from "sonner";
 import {
@@ -6,7 +7,9 @@ import {
   Smartphone, Lock, Moon, Sun, Youtube, PenLine, Search, Megaphone,
   FileText, Linkedin, Instagram, Mail, Code2, Palette, Briefcase,
   ChevronDown, ArrowRight, Wand2, Check, Star, History, RotateCcw,
+  Menu, X, Images,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
