@@ -107,6 +107,8 @@ function loadImage(file: File): Promise<UploadedImage> {
 
 function ImageCombinerPage() {
   const [dark, setDark] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
   useEffect(() => {
     const stored = typeof window !== "undefined" ? localStorage.getItem("pc-theme") : null;
     const prefersDark =
