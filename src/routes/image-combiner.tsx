@@ -26,7 +26,7 @@ export const Route = createFileRoute("/image-combiner")({
   component: ImageCombinerPage,
   head: () => ({
     meta: [
-      { title: "AI Image Combiner — Merge Unlimited Images into One | PromptCraft AI" },
+      { title: "AI Image Combiner — Merge Unlimited Images into One | ToolNex" },
       {
         name: "description",
         content:
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/image-combiner")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AI Image Combiner — PromptCraft AI" },
+      { name: "twitter:title", content: "AI Image Combiner — ToolNex" },
       {
         name: "twitter:description",
         content: "Merge unlimited images into one — private, fast, browser-only.",
@@ -353,7 +353,7 @@ function ImageCombinerPage() {
     const a = document.createElement("a");
     const url = URL.createObjectURL(blob);
     a.href = url;
-    a.download = `promptcraft-merged.${type}`;
+    a.download = `toolnex-merged.${type}`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -387,7 +387,7 @@ function ImageCombinerPage() {
             <div className="h-8 w-8 rounded-lg bg-gradient-brand grid place-items-center shadow-glow">
               <Sparkles className="h-4 w-4 text-white" />
             </div>
-            <span className="font-semibold tracking-tight">PromptCraft AI</span>
+            <span className="font-semibold tracking-tight">ToolNex</span>
           </Link>
           <nav className="hidden md:flex items-center gap-7 text-sm">
             <Link to="/" className="text-muted-foreground hover:text-foreground transition">Home</Link>
@@ -850,7 +850,7 @@ function ImageCombinerPage() {
               <Sparkles className="h-3.5 w-3.5 text-white" />
             </div>
             <span className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} PromptCraft AI — all tools 100% free.
+              © {new Date().getFullYear()} ToolNex — all tools 100% free.
             </span>
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
