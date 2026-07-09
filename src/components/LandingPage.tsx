@@ -182,129 +182,17 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
             {/* Ad — between Hero and Generator */}
             <AdPlaceholder size="banner" slotId="pre-generator" label="Adstera Ad Placement — Above Generator" className="pt-2" />
 
-            {/* AI Prompt Generator */}
             <section id="generator" className="scroll-mt-24">
               <div className="mx-auto max-w-3xl text-center">
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground">
-                  <Sparkles className="h-3 w-3 text-[color:var(--brand)]" /> AI Prompt Generator
+                  <Sparkles className="h-3 w-3 text-[color:var(--brand)]" /> Multilingual AI Prompt Generator
                 </div>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Craft a prompt in under 10 seconds</h2>
-                <p className="mt-3 text-muted-foreground">Pick a category, describe your goal, tune tone and length.</p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Craft expert prompts in any language</h2>
+                <p className="mt-3 text-muted-foreground">Structured, high-quality prompts for ChatGPT, Gemini, Claude, Midjourney and more — in 20+ languages.</p>
               </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
-              >
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div>
-                    <Label className="mb-2 block text-sm font-medium">Prompt category</Label>
-                    <Select value={category} onValueChange={setCategory}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="mb-2 block text-sm font-medium">Tone</Label>
-                    <Select value={tone} onValueChange={setTone}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {TONES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="mt-5">
-                  <Label className="mb-2 block text-sm font-medium">Prompt goal</Label>
-                  <Textarea
-                    value={goal}
-                    onChange={(e) => setGoal(e.target.value)}
-                    placeholder={`Example:\n"I want to create a YouTube video about earning money online."`}
-                    className="min-h-28 resize-none text-base"
-                  />
-                </div>
-
-                <div className="mt-5">
-                  <Label className="mb-2 block text-sm font-medium">Output length</Label>
-                  <RadioGroup
-                    value={length}
-                    onValueChange={(v) => setLength(v as Length)}
-                    className="flex flex-wrap gap-2"
-                  >
-                    {(["Short", "Medium", "Long"] as Length[]).map((l) => (
-                      <label
-                        key={l}
-                        htmlFor={`len-${l}`}
-                        className={`flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
-                          length === l
-                            ? "border-transparent bg-gradient-brand text-white shadow-glow"
-                            : "border-border hover:bg-accent"
-                        }`}
-                      >
-                        <RadioGroupItem id={`len-${l}`} value={l} className="sr-only" />
-                        {l}
-                      </label>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                <div className="mt-7">
-                  <Button
-                    onClick={generate}
-                    disabled={loading}
-                    size="lg"
-                    className="w-full bg-gradient-brand text-white shadow-glow hover:opacity-95 sm:w-auto"
-                  >
-                    {loading ? (
-                      <><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Generating…</>
-                    ) : (
-                      <><Wand2 className="mr-2 h-4 w-4" /> Generate Prompt</>
-                    )}
-                  </Button>
-                </div>
-
-                <AnimatePresence>
-                  {result && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 16, height: 0 }}
-                      animate={{ opacity: 1, y: 0, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="mt-6 overflow-hidden"
-                    >
-                      <div className="rounded-xl border border-border bg-gradient-soft p-5">
-                        <div className="mb-3 flex items-center justify-between">
-                          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Your prompt</span>
-                          <span className="rounded-full bg-background/70 px-2 py-0.5 text-xs text-muted-foreground">
-                            {category} · {tone} · {length}
-                          </span>
-                        </div>
-                        <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-foreground">
-                          {result}
-                        </pre>
-                        <div className="mt-5 flex flex-wrap gap-2">
-                          <Button size="sm" onClick={() => copy(result)} className="bg-gradient-brand text-white hover:opacity-95">
-                            <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy Prompt
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={generate}>
-                            <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Regenerate
-                          </Button>
-                          <Button size="sm" variant="ghost" onClick={() => { setResult(""); setGoal(""); }}>
-                            <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+              <PromptGenerator />
             </section>
+
 
             {/* Ad — between Generator and Image Combiner */}
             <AdPlaceholder size="banner" slotId="between-tools" label="Adstera Ad Placement — Between Tools" />
