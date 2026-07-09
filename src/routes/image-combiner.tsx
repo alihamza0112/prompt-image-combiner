@@ -491,8 +491,15 @@ function ImageCombinerPage() {
         </AnimatePresence>
       </header>
 
+      {/* Top banner ad */}
+      <div className="border-b border-border/40 bg-muted/20 py-3">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AdPlaceholder size="leaderboard" slotId="ic-top-banner" label="Adstera Ad Placement — Top Banner" />
+        </div>
+      </div>
 
       {/* Hero */}
+
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-gradient-brand opacity-30 blur-3xl animate-float-slow" />
