@@ -35,35 +35,8 @@ function GradientBlob({ className }: { className?: string }) {
 }
 
 export default function LandingPage({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
-  const [category, setCategory] = useState("ChatGPT");
-  const [goal, setGoal] = useState("");
-  const [tone, setTone] = useState("Professional");
-  const [length, setLength] = useState<Length>("Medium");
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const generate = async () => {
-    if (!goal.trim()) {
-      toast.error("Add a short goal to generate a prompt.");
-      return;
-    }
-    setLoading(true);
-    setResult("");
-    await new Promise((r) => setTimeout(r, 420));
-    const prompt = buildPrompt(category, goal, tone, length);
-    setResult(prompt);
-    setLoading(false);
-  };
-
-  const copy = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Copied to clipboard");
-    } catch {
-      toast.error("Copy failed. Please try again.");
-    }
-  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
