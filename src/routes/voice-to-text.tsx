@@ -15,13 +15,13 @@ export const Route = createFileRoute("/voice-to-text")({
   component: VoiceToTextPage,
   head: () => ({
     meta: [
-      { title: "AI Voice to Text — Free Browser Speech Recognition | ToolNex" },
+      { title: "AI Voice to Text — Free Browser Speech Recognition | AIXO" },
       {
         name: "description",
         content:
-          "Real-time voice-to-text in your browser. Record, transcribe, and copy — private, free, and multilingual. Part of the ToolNex micro SaaS toolkit.",
+          "Real-time voice-to-text in your browser. Record, transcribe, and copy — private, free, and multilingual. Part of the AIXO micro SaaS toolkit.",
       },
-      { property: "og:title", content: "AI Voice to Text — ToolNex" },
+      { property: "og:title", content: "AI Voice to Text — AIXO" },
       {
         property: "og:description",
         content: "Free real-time speech-to-text with multi-language recognition. 100% browser-based.",
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/voice-to-text")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/voice-to-text" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AI Voice to Text — ToolNex" },
+      { name: "twitter:title", content: "AI Voice to Text — AIXO" },
       { name: "twitter:description", content: "Real-time browser-based speech-to-text, free and private." },
     ],
     links: [{ rel: "canonical", href: "/voice-to-text" }],

@@ -32,7 +32,7 @@ export default function SiteHeader() {
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand animate-logo-float animate-logo-glow">
             <Sparkles className="h-4 w-4 text-white transition-transform duration-300 group-hover:rotate-12" />
           </span>
-          <span className="text-base font-semibold tracking-tight">ToolNex</span>
+          <span className="text-base font-semibold tracking-tight">AIXO</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -114,15 +114,15 @@ export function SiteFooter() {
           <span className="grid h-7 w-7 place-items-center rounded-md bg-gradient-brand">
             <Sparkles className="h-3.5 w-3.5 text-white" />
           </span>
-          <span className="text-sm font-semibold">ToolNex</span>
+          <span className="text-sm font-semibold">AIXO</span>
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Home</Link>
           <Link to="/image-combiner" className="hover:text-foreground">Image Combiner</Link>
           <Link to="/voice-to-text" className="hover:text-foreground">Voice to Text</Link>
-          <a href="mailto:hello@toolnex.app" className="hover:text-foreground">Contact</a>
+          <a href="mailto:hello@aixo.app" className="hover:text-foreground">Contact</a>
         </div>
-        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} ToolNex</p>
+        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} AIXO</p>
       </div>
     </footer>
   );

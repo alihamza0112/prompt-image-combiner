@@ -5,13 +5,13 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "ToolNex — Free Micro SaaS AI Toolkit" },
+      { title: "AIXO — Free Micro SaaS AI Toolkit" },
       {
         name: "description",
         content:
           "A lightweight micro SaaS toolkit: AI Prompt Generator, Image Combiner, and AI Voice to Text. Fast, private, and free — no account required.",
       },
-      { property: "og:title", content: "ToolNex — Free Micro SaaS AI Toolkit" },
+      { property: "og:title", content: "AIXO — Free Micro SaaS AI Toolkit" },
       {
         property: "og:description",
         content:
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "ToolNex — Free Micro SaaS AI Toolkit" },
+      { name: "twitter:title", content: "AIXO — Free Micro SaaS AI Toolkit" },
       {
         name: "twitter:description",
         content:
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: "ToolNex",
+          name: "AIXO",
           applicationCategory: "ProductivityApplication",
           operatingSystem: "Web",
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
