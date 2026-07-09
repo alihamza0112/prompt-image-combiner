@@ -98,11 +98,11 @@ export default function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer id="contact" className="mt-16 border-t border-white/5 py-10">
+    <footer className="mt-16 border-t border-white/5 py-10">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <span className="grid h-7 w-7 place-items-center rounded-md bg-gradient-brand">
-            <Sparkles className="h-3.5 w-3.5 text-white" />
+            <AixoLogo className="h-4 w-4" />
           </span>
           <span className="text-sm font-semibold">AIXO</span>
         </div>
@@ -110,7 +110,8 @@ export function SiteFooter() {
           <Link to="/" className="hover:text-foreground">Home</Link>
           <Link to="/image-combiner" className="hover:text-foreground">Image Combiner</Link>
           <Link to="/voice-to-text" className="hover:text-foreground">Voice to Text</Link>
-          <a href="mailto:hello@aixo.app" className="hover:text-foreground">Contact</a>
+          <Link to="/contact" className="hover:text-foreground">Contact</Link>
+
         </div>
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} AIXO</p>
       </div>
