@@ -72,7 +72,7 @@ export default function LandingPage() {
               One toolkit. <span className="text-gradient-brand">Every quick AI task.</span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-              ToolNex bundles the small AI utilities you use every day — prompt writing, image merging, and voice-to-text — into one fast, private workspace.
+              AIXO bundles the small AI utilities you use every day — prompt writing, image merging, and voice-to-text — into one fast, private workspace.
             </p>
           </motion.div>
         </div>

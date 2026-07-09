@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VoiceToTextRouteImport } from './routes/voice-to-text'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ImageCombinerRouteImport } from './routes/image-combiner'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
 const VoiceToTextRoute = VoiceToTextRouteImport.update({
@@ -29,6 +30,11 @@ const ImageCombinerRoute = ImageCombinerRouteImport.update({
   path: '/image-combiner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/voice-to-text': typeof VoiceToTextRoute
@@ -50,20 +58,33 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
+  fullPaths:
+    | '/'
+    | '/contact'
+    | '/image-combiner'
+    | '/sitemap.xml'
+    | '/voice-to-text'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
-  id: '__root__' | '/' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
+  to: '/' | '/contact' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
+  id:
+    | '__root__'
+    | '/'
+    | '/contact'
+    | '/image-combiner'
+    | '/sitemap.xml'
+    | '/voice-to-text'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactRoute: typeof ContactRoute
   ImageCombinerRoute: typeof ImageCombinerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VoiceToTextRoute: typeof VoiceToTextRoute
@@ -92,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ImageCombinerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +132,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactRoute: ContactRoute,
   ImageCombinerRoute: ImageCombinerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   VoiceToTextRoute: VoiceToTextRoute,

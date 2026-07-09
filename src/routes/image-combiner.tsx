@@ -24,7 +24,7 @@ export const Route = createFileRoute("/image-combiner")({
   component: ImageCombinerPage,
   head: () => ({
     meta: [
-      { title: "AI Image Combiner — Merge Unlimited Images into One | ToolNex" },
+      { title: "AI Image Combiner — Merge Unlimited Images into One | AIXO" },
       {
         name: "description",
         content:
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/image-combiner")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AI Image Combiner — ToolNex" },
+      { name: "twitter:title", content: "AI Image Combiner — AIXO" },
       {
         name: "twitter:description",
         content: "Merge unlimited images into one — private, fast, browser-only.",
@@ -319,7 +319,7 @@ function ImageCombinerPage() {
     const a = document.createElement("a");
     const url = URL.createObjectURL(blob);
     a.href = url;
-    a.download = `toolnex-merged.${type}`;
+    a.download = `aixo-merged.${type}`;
     document.body.appendChild(a);
     a.click();
     a.remove();

@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ToolNex — Free Micro SaaS AI Toolkit" },
+      { title: "AIXO — Free Micro SaaS AI Toolkit" },
       {
         name: "description",
         content:
-          "ToolNex is a lightweight micro SaaS toolkit: AI Prompt Generator, Image Combiner, and AI Voice to Text — all free, all in your browser.",
+          "AIXO is a lightweight micro SaaS toolkit: AI Prompt Generator, Image Combiner, and AI Voice to Text — all free, all in your browser.",
       },
-      { property: "og:site_name", content: "ToolNex" },
+      { property: "og:site_name", content: "AIXO" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
