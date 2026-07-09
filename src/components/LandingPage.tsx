@@ -13,47 +13,6 @@ import {
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
 import PromptGenerator from "@/components/PromptGenerator";
 
-const CATEGORIES = [
-  "ChatGPT", "Gemini", "Claude", "Midjourney", "Veo", "Sora", "Flux",
-  "Stable Diffusion", "Blog Writing", "SEO", "YouTube", "Coding",
-  "Marketing", "Resume", "Email", "Social Media",
-];
-const TONES = ["Professional", "Friendly", "Creative", "Formal", "Funny", "Expert"];
-
-type Length = "Short" | "Medium" | "Long";
-
-function buildPrompt(category: string, goal: string, tone: string, length: Length) {
-  const g = goal.trim() || "your topic";
-  const toneLine = `Tone: ${tone.toLowerCase()}.`;
-  const detail =
-    length === "Short"
-      ? "Keep it under 80 words, punchy, no filler."
-      : length === "Medium"
-      ? "Aim for 150-220 words with clear structure."
-      : "Write 300-450 words with headings, examples, and specifics.";
-
-  const map: Record<string, string> = {
-    ChatGPT: `Act as an expert consultant. Task: ${g}. Deliver: (1) 1-sentence framing, (2) a 5-step actionable plan, (3) potential pitfalls, (4) a concise next-action checklist.`,
-    Gemini: `You are a research-first assistant. Topic: ${g}. Provide: recent context (2024-2026), 3 balanced viewpoints, verified sources or reasoning, and a takeaway summary.`,
-    Claude: `Act as a thoughtful writing partner. Goal: ${g}. Produce a nuanced, well-reasoned response. Use plain language, clear paragraphs, and concrete examples.`,
-    Midjourney: `Cinematic photograph of ${g}, shot on 85mm lens, golden hour, shallow depth of field, ultra-detailed, film grain, editorial composition --ar 16:9 --style raw --v 6`,
-    Veo: `A cinematic 8-second video of ${g}. Camera: smooth dolly-in, shallow depth. Lighting: soft natural rim light. Style: photorealistic, 24fps, muted color grade.`,
-    Sora: `Photorealistic short film clip: ${g}. Slow tracking shot, subject centered, motion blur on background, shot on ARRI Alexa, cinematic color grade, 4K.`,
-    Flux: `Ultra-realistic portrait of ${g}. Studio lighting, 50mm lens, sharp focus, subtle skin texture, editorial magazine style, neutral background.`,
-    "Stable Diffusion": `masterpiece, best quality, ${g}, intricate detail, dramatic lighting, cinematic composition, 8k, photorealistic (negative prompt: blurry, low-res, extra fingers)`,
-    SEO: `Write an SEO-optimized article outline for: ${g}. Include primary keyword, 5 secondary keywords, meta title (≤60 chars), meta description (≤155 chars), H1/H2/H3 structure, and internal linking suggestions.`,
-    "Blog Writing": `Write a 1,200-word SEO blog post about: ${g}. Include a hook intro, 5 H2 sections with H3 subpoints, real examples, an FAQ block with 3 questions, and a concise conclusion with a clear CTA.`,
-    YouTube: `Write a high-retention YouTube script about: ${g}. Structure: 8-second hook, promise, 3 story-driven sections with pattern interrupts every 30s, mid-roll CTA, strong payoff, and 3 title + thumbnail concepts.`,
-    Coding: `You are a senior engineer. Task: ${g}. Respond with: (1) clarifying assumptions, (2) a clean, production-ready code solution with comments, (3) time/space complexity, (4) 3 test cases including an edge case, (5) suggested refactors.`,
-    Marketing: `Act as a growth marketer. Objective: ${g}. Deliver: audience persona, core message, 3 positioning angles, a 5-post launch sequence, and 3 headline variations optimized for click-through.`,
-    Resume: `Craft an ATS-friendly resume bullet set for: ${g}. Use the XYZ formula ("Accomplished X, as measured by Y, by doing Z"). Provide 5 quantified bullets, a 3-sentence professional summary, and 8 relevant hard-skill keywords.`,
-    Email: `Write a persuasive email about: ${g}. Include: subject line (≤50 chars) with 2 A/B variants, personalized opener, one clear value proposition, single CTA, and a friendly sign-off. Keep it under 150 words.`,
-    "Social Media": `Create a 7-day social content plan for: ${g}. For each day give: platform, hook, caption (≤220 chars), hashtag set, and a visual direction. Include one carousel, one reel script, and one poll.`,
-  };
-
-  const base = map[category] ?? map.ChatGPT;
-  return `${base}\n\n${toneLine} ${detail}`;
-}
 
 const FEATURES = [
   { icon: Zap, title: "Instant results", desc: "Prompts and merged images generated in under a second." },
