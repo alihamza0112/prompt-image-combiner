@@ -137,6 +137,8 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
 
   useEffect(() => {
     try {
