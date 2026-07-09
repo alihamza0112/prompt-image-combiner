@@ -1,64 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import {
-  Sparkles, Copy, RefreshCw, Trash2, Zap, Bot, ClipboardCheck, Target,
-  Lock, Moon, Sun, ArrowRight, Wand2, Check, Menu, X, Images,
+  Sparkles, Zap, Bot, ClipboardCheck,
+  Lock, Moon, Sun, ArrowRight, Check, Menu, X, Images,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
+import PromptGenerator from "@/components/PromptGenerator";
 
-const CATEGORIES = [
-  "ChatGPT", "Gemini", "Claude", "Midjourney", "Veo", "Sora", "Flux",
-  "Stable Diffusion", "Blog Writing", "SEO", "YouTube", "Coding",
-  "Marketing", "Resume", "Email", "Social Media",
-];
-const TONES = ["Professional", "Friendly", "Creative", "Formal", "Funny", "Expert"];
-
-type Length = "Short" | "Medium" | "Long";
-
-function buildPrompt(category: string, goal: string, tone: string, length: Length) {
-  const g = goal.trim() || "your topic";
-  const toneLine = `Tone: ${tone.toLowerCase()}.`;
-  const detail =
-    length === "Short"
-      ? "Keep it under 80 words, punchy, no filler."
-      : length === "Medium"
-      ? "Aim for 150-220 words with clear structure."
-      : "Write 300-450 words with headings, examples, and specifics.";
-
-  const map: Record<string, string> = {
-    ChatGPT: `Act as an expert consultant. Task: ${g}. Deliver: (1) 1-sentence framing, (2) a 5-step actionable plan, (3) potential pitfalls, (4) a concise next-action checklist.`,
-    Gemini: `You are a research-first assistant. Topic: ${g}. Provide: recent context (2024-2026), 3 balanced viewpoints, verified sources or reasoning, and a takeaway summary.`,
-    Claude: `Act as a thoughtful writing partner. Goal: ${g}. Produce a nuanced, well-reasoned response. Use plain language, clear paragraphs, and concrete examples.`,
-    Midjourney: `Cinematic photograph of ${g}, shot on 85mm lens, golden hour, shallow depth of field, ultra-detailed, film grain, editorial composition --ar 16:9 --style raw --v 6`,
-    Veo: `A cinematic 8-second video of ${g}. Camera: smooth dolly-in, shallow depth. Lighting: soft natural rim light. Style: photorealistic, 24fps, muted color grade.`,
-    Sora: `Photorealistic short film clip: ${g}. Slow tracking shot, subject centered, motion blur on background, shot on ARRI Alexa, cinematic color grade, 4K.`,
-    Flux: `Ultra-realistic portrait of ${g}. Studio lighting, 50mm lens, sharp focus, subtle skin texture, editorial magazine style, neutral background.`,
-    "Stable Diffusion": `masterpiece, best quality, ${g}, intricate detail, dramatic lighting, cinematic composition, 8k, photorealistic (negative prompt: blurry, low-res, extra fingers)`,
-    SEO: `Write an SEO-optimized article outline for: ${g}. Include primary keyword, 5 secondary keywords, meta title (≤60 chars), meta description (≤155 chars), H1/H2/H3 structure, and internal linking suggestions.`,
-    "Blog Writing": `Write a 1,200-word SEO blog post about: ${g}. Include a hook intro, 5 H2 sections with H3 subpoints, real examples, an FAQ block with 3 questions, and a concise conclusion with a clear CTA.`,
-    YouTube: `Write a high-retention YouTube script about: ${g}. Structure: 8-second hook, promise, 3 story-driven sections with pattern interrupts every 30s, mid-roll CTA, strong payoff, and 3 title + thumbnail concepts.`,
-    Coding: `You are a senior engineer. Task: ${g}. Respond with: (1) clarifying assumptions, (2) a clean, production-ready code solution with comments, (3) time/space complexity, (4) 3 test cases including an edge case, (5) suggested refactors.`,
-    Marketing: `Act as a growth marketer. Objective: ${g}. Deliver: audience persona, core message, 3 positioning angles, a 5-post launch sequence, and 3 headline variations optimized for click-through.`,
-    Resume: `Craft an ATS-friendly resume bullet set for: ${g}. Use the XYZ formula ("Accomplished X, as measured by Y, by doing Z"). Provide 5 quantified bullets, a 3-sentence professional summary, and 8 relevant hard-skill keywords.`,
-    Email: `Write a persuasive email about: ${g}. Include: subject line (≤50 chars) with 2 A/B variants, personalized opener, one clear value proposition, single CTA, and a friendly sign-off. Keep it under 150 words.`,
-    "Social Media": `Create a 7-day social content plan for: ${g}. For each day give: platform, hook, caption (≤220 chars), hashtag set, and a visual direction. Include one carousel, one reel script, and one poll.`,
-  };
-
-  const base = map[category] ?? map.ChatGPT;
-  return `${base}\n\n${toneLine} ${detail}`;
-}
 
 const FEATURES = [
   { icon: Zap, title: "Instant results", desc: "Prompts and merged images generated in under a second." },
@@ -81,35 +35,8 @@ function GradientBlob({ className }: { className?: string }) {
 }
 
 export default function LandingPage({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
-  const [category, setCategory] = useState("ChatGPT");
-  const [goal, setGoal] = useState("");
-  const [tone, setTone] = useState("Professional");
-  const [length, setLength] = useState<Length>("Medium");
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const generate = async () => {
-    if (!goal.trim()) {
-      toast.error("Add a short goal to generate a prompt.");
-      return;
-    }
-    setLoading(true);
-    setResult("");
-    await new Promise((r) => setTimeout(r, 420));
-    const prompt = buildPrompt(category, goal, tone, length);
-    setResult(prompt);
-    setLoading(false);
-  };
-
-  const copy = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast.success("Copied to clipboard");
-    } catch {
-      toast.error("Copy failed. Please try again.");
-    }
-  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -255,129 +182,17 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
             {/* Ad — between Hero and Generator */}
             <AdPlaceholder size="banner" slotId="pre-generator" label="Adstera Ad Placement — Above Generator" className="pt-2" />
 
-            {/* AI Prompt Generator */}
             <section id="generator" className="scroll-mt-24">
               <div className="mx-auto max-w-3xl text-center">
                 <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground">
-                  <Sparkles className="h-3 w-3 text-[color:var(--brand)]" /> AI Prompt Generator
+                  <Sparkles className="h-3 w-3 text-[color:var(--brand)]" /> Multilingual AI Prompt Generator
                 </div>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Craft a prompt in under 10 seconds</h2>
-                <p className="mt-3 text-muted-foreground">Pick a category, describe your goal, tune tone and length.</p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Craft expert prompts in any language</h2>
+                <p className="mt-3 text-muted-foreground">Structured, high-quality prompts for ChatGPT, Gemini, Claude, Midjourney and more — in 20+ languages.</p>
               </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
-              >
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div>
-                    <Label className="mb-2 block text-sm font-medium">Prompt category</Label>
-                    <Select value={category} onValueChange={setCategory}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="mb-2 block text-sm font-medium">Tone</Label>
-                    <Select value={tone} onValueChange={setTone}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {TONES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="mt-5">
-                  <Label className="mb-2 block text-sm font-medium">Prompt goal</Label>
-                  <Textarea
-                    value={goal}
-                    onChange={(e) => setGoal(e.target.value)}
-                    placeholder={`Example:\n"I want to create a YouTube video about earning money online."`}
-                    className="min-h-28 resize-none text-base"
-                  />
-                </div>
-
-                <div className="mt-5">
-                  <Label className="mb-2 block text-sm font-medium">Output length</Label>
-                  <RadioGroup
-                    value={length}
-                    onValueChange={(v) => setLength(v as Length)}
-                    className="flex flex-wrap gap-2"
-                  >
-                    {(["Short", "Medium", "Long"] as Length[]).map((l) => (
-                      <label
-                        key={l}
-                        htmlFor={`len-${l}`}
-                        className={`flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
-                          length === l
-                            ? "border-transparent bg-gradient-brand text-white shadow-glow"
-                            : "border-border hover:bg-accent"
-                        }`}
-                      >
-                        <RadioGroupItem id={`len-${l}`} value={l} className="sr-only" />
-                        {l}
-                      </label>
-                    ))}
-                  </RadioGroup>
-                </div>
-
-                <div className="mt-7">
-                  <Button
-                    onClick={generate}
-                    disabled={loading}
-                    size="lg"
-                    className="w-full bg-gradient-brand text-white shadow-glow hover:opacity-95 sm:w-auto"
-                  >
-                    {loading ? (
-                      <><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Generating…</>
-                    ) : (
-                      <><Wand2 className="mr-2 h-4 w-4" /> Generate Prompt</>
-                    )}
-                  </Button>
-                </div>
-
-                <AnimatePresence>
-                  {result && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 16, height: 0 }}
-                      animate={{ opacity: 1, y: 0, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="mt-6 overflow-hidden"
-                    >
-                      <div className="rounded-xl border border-border bg-gradient-soft p-5">
-                        <div className="mb-3 flex items-center justify-between">
-                          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Your prompt</span>
-                          <span className="rounded-full bg-background/70 px-2 py-0.5 text-xs text-muted-foreground">
-                            {category} · {tone} · {length}
-                          </span>
-                        </div>
-                        <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-foreground">
-                          {result}
-                        </pre>
-                        <div className="mt-5 flex flex-wrap gap-2">
-                          <Button size="sm" onClick={() => copy(result)} className="bg-gradient-brand text-white hover:opacity-95">
-                            <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy Prompt
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={generate}>
-                            <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Regenerate
-                          </Button>
-                          <Button size="sm" variant="ghost" onClick={() => { setResult(""); setGoal(""); }}>
-                            <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+              <PromptGenerator />
             </section>
+
 
             {/* Ad — between Generator and Image Combiner */}
             <AdPlaceholder size="banner" slotId="between-tools" label="Adstera Ad Placement — Between Tools" />
