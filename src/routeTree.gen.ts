@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VoiceToTextRouteImport } from './routes/voice-to-text'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ImageCombinerRouteImport } from './routes/image-combiner'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VoiceToTextRoute = VoiceToTextRouteImport.update({
+  id: '/voice-to-text',
+  path: '/voice-to-text',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/image-combiner': typeof ImageCombinerRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/image-combiner' | '/sitemap.xml'
+  fullPaths: '/' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/image-combiner' | '/sitemap.xml'
-  id: '__root__' | '/' | '/image-combiner' | '/sitemap.xml'
+  to: '/' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
+  id: '__root__' | '/' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ImageCombinerRoute: typeof ImageCombinerRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  VoiceToTextRoute: typeof VoiceToTextRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/voice-to-text': {
+      id: '/voice-to-text'
+      path: '/voice-to-text'
+      fullPath: '/voice-to-text'
+      preLoaderRoute: typeof VoiceToTextRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ImageCombinerRoute: ImageCombinerRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  VoiceToTextRoute: VoiceToTextRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

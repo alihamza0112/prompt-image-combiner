@@ -77,13 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PromptCraft AI — Free AI Prompt Generator" },
+      { title: "ToolNex — Free Micro SaaS AI Toolkit" },
       {
         name: "description",
         content:
-          "Free AI prompt generator for ChatGPT, Claude, Gemini, Midjourney, Sora, Veo, Flux and more.",
+          "ToolNex is a lightweight micro SaaS toolkit: AI Prompt Generator, Image Combiner, and AI Voice to Text — all free, all in your browser.",
       },
-      { property: "og:site_name", content: "PromptCraft AI" },
+      { property: "og:site_name", content: "ToolNex" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -92,7 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
   }),
   shellComponent: RootShell,

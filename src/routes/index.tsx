@@ -6,26 +6,26 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "PromptCraft AI — Generate Better AI Prompts in Seconds" },
+      { title: "ToolNex — Free Micro SaaS AI Toolkit" },
       {
         name: "description",
         content:
-          "Free AI prompt generator for ChatGPT, Claude, Gemini, Midjourney, Sora, Veo, Flux and more. Craft high-quality prompts in seconds — no account required.",
+          "A lightweight micro SaaS toolkit: AI Prompt Generator, Image Combiner, and AI Voice to Text. Fast, private, and free — no account required.",
       },
-      { property: "og:title", content: "PromptCraft AI — Generate Better AI Prompts in Seconds" },
+      { property: "og:title", content: "ToolNex — Free Micro SaaS AI Toolkit" },
       {
         property: "og:description",
         content:
-          "Free AI prompt generator with expert templates for ChatGPT, Claude, Gemini, Midjourney, Sora and more.",
+          "AI Prompt Generator, Image Combiner, and AI Voice to Text — a fast, private toolkit for creators.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "PromptCraft AI — Generate Better AI Prompts in Seconds" },
+      { name: "twitter:title", content: "ToolNex — Free Micro SaaS AI Toolkit" },
       {
         name: "twitter:description",
         content:
-          "Free AI prompt generator with expert templates for ChatGPT, Claude, Gemini, Midjourney and more.",
+          "Free micro SaaS AI toolkit: prompt generator, image combiner, and voice-to-text.",
       },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -35,12 +35,12 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: "PromptCraft AI",
+          name: "ToolNex",
           applicationCategory: "ProductivityApplication",
           operatingSystem: "Web",
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           description:
-            "Free AI prompt generator for ChatGPT, Claude, Gemini, Midjourney, Sora, Veo, Flux and more.",
+            "Micro SaaS toolkit with AI Prompt Generator, Image Combiner, and AI Voice to Text.",
         }),
       },
     ],
