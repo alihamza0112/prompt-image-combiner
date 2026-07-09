@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import {
-  Sparkles, Copy, RefreshCw, Trash2, Zap, Bot, ClipboardCheck, Target,
-  Lock, Moon, Sun, ArrowRight, Wand2, Check, Menu, X, Images,
+  Sparkles, Zap, Bot, ClipboardCheck,
+  Lock, Moon, Sun, ArrowRight, Check, Menu, X, Images,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
+import PromptGenerator from "@/components/PromptGenerator";
 
 const CATEGORIES = [
   "ChatGPT", "Gemini", "Claude", "Midjourney", "Veo", "Sora", "Flux",
