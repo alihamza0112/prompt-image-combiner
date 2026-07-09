@@ -387,11 +387,25 @@ function ImageCombinerPage() {
             </div>
             <span className="font-semibold tracking-tight">PromptCraft AI</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-foreground transition">Home</Link>
-            <a href="#tool" className="hover:text-foreground transition">Combiner</a>
-            <a href="#use-cases" className="hover:text-foreground transition">Use cases</a>
-            <a href="#faq" className="hover:text-foreground transition">FAQ</a>
+          <nav className="hidden md:flex items-center gap-7 text-sm">
+            <Link to="/" className="text-muted-foreground hover:text-foreground transition">Home</Link>
+            <Link to="/" hash="generator" className="text-muted-foreground hover:text-foreground transition">
+              AI Prompt Generator
+            </Link>
+            <Link
+              to="/image-combiner"
+              aria-current="page"
+              className="font-medium text-foreground transition"
+            >
+              Image Combiner
+            </Link>
+            <Link to="/" hash="features" className="text-muted-foreground hover:text-foreground transition">
+              Features
+            </Link>
+            <a href="#faq" className="text-muted-foreground hover:text-foreground transition">FAQ</a>
+            <Link to="/" hash="contact" className="text-muted-foreground hover:text-foreground transition">
+              Contact
+            </Link>
           </nav>
           <div className="flex items-center gap-2">
             <Button
@@ -406,9 +420,77 @@ function ImageCombinerPage() {
             >
               Start Combining <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
+            <button
+              aria-label="Toggle menu"
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((v) => !v)}
+              className="grid h-9 w-9 place-items-center rounded-lg border border-border transition-colors hover:bg-accent md:hidden"
+            >
+              {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
           </div>
         </div>
+        <AnimatePresence>
+          {mobileNavOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden border-t border-border/60 bg-background/95 backdrop-blur-xl md:hidden"
+            >
+              <nav className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3 sm:px-6">
+                <Link
+                  to="/"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/"
+                  hash="generator"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  AI Prompt Generator
+                </Link>
+                <Link
+                  to="/image-combiner"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground bg-accent/50"
+                >
+                  <Images className="h-4 w-4" /> Image Combiner
+                </Link>
+                <Link
+                  to="/"
+                  hash="features"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  Features
+                </Link>
+                <a
+                  href="#faq"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  FAQ
+                </a>
+                <Link
+                  to="/"
+                  hash="contact"
+                  onClick={() => setMobileNavOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                >
+                  Contact
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
+
 
       {/* Hero */}
       <section className="relative overflow-hidden">
