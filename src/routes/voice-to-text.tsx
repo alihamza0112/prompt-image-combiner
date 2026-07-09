@@ -214,27 +214,47 @@ function VoiceToTextPage() {
   };
 
 
+  // The text the user sees / copies / downloads. When the target language
+  // differs and translation is available, we show that; otherwise the raw
+  // transcript.
+  const displayed = !sameLang && translated ? translated : transcript;
+
   const handleCopy = async () => {
-    const text = transcript.trim();
+    const text = displayed.trim();
     if (!text) return toast.error("Nothing to copy yet.");
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("Transcript copied.");
+      toast.success("Copied.");
     } catch {
       toast.error("Copy failed.");
     }
+  };
+
+  const handleDownload = () => {
+    const text = displayed.trim();
+    if (!text) return toast.error("Nothing to download yet.");
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `aixo-transcript-${outputLang}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleClear = () => {
     stopListening();
     setTranscript("");
     setInterim("");
+    setTranslated("");
     finalRef.current = "";
   };
 
   const wordCount = useMemo(
-    () => transcript.trim().split(/\s+/).filter(Boolean).length,
-    [transcript],
+    () => displayed.trim().split(/\s+/).filter(Boolean).length,
+    [displayed],
   );
 
   return (
