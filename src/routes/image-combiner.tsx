@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Toaster, toast } from "sonner";
@@ -491,8 +493,15 @@ function ImageCombinerPage() {
         </AnimatePresence>
       </header>
 
+      {/* Top banner ad */}
+      <div className="border-b border-border/40 bg-muted/20 py-3">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AdPlaceholder size="leaderboard" slotId="ic-top-banner" label="Adstera Ad Placement — Top Banner" />
+        </div>
+      </div>
 
       {/* Hero */}
+
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <div className="absolute -top-32 -left-24 h-96 w-96 rounded-full bg-gradient-brand opacity-30 blur-3xl animate-float-slow" />
@@ -828,8 +837,13 @@ function ImageCombinerPage() {
         </Accordion>
       </section>
 
+      {/* Above-footer ad */}
+      <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <AdPlaceholder size="leaderboard" slotId="ic-above-footer" label="Adstera Ad Placement — Above Footer" />
+      </div>
+
       {/* Footer */}
-      <footer className="border-t border-border/60">
+      <footer className="border-t border-border/60 pb-[60px] md:pb-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-brand grid place-items-center">
@@ -845,8 +859,12 @@ function ImageCombinerPage() {
           </div>
         </div>
       </footer>
+
+      {/* Sticky mobile bottom ad */}
+      <StickyMobileAd />
     </div>
   );
+
 }
 
 // Unused import guard — keeps the ChevronDown available for Accordion styling in future.
