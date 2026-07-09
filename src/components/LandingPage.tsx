@@ -744,7 +744,7 @@ export default function LandingPage({ dark, setDark }: { dark: boolean; setDark:
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-10">
+      <footer id="contact" className="border-t border-border py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <div className="grid h-7 w-7 place-items-center rounded-md bg-gradient-brand">
