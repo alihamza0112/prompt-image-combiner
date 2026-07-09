@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Toaster, toast } from "sonner";
-import { Mic, MicOff, Copy, Trash2, AlertCircle } from "lucide-react";
+import { Mic, MicOff, Copy, Trash2, AlertCircle, Download, Languages } from "lucide-react";
+import { translateText, baseLang } from "@/lib/translate";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -57,6 +58,10 @@ const LANGUAGES: { code: string; label: string }[] = [
   { code: "zh-CN", label: "Chinese (Simplified)" },
   { code: "zh-TW", label: "Chinese (Traditional)" },
   { code: "id-ID", label: "Indonesian" },
+  { code: "ur-PK", label: "Urdu" },
+  { code: "bn-IN", label: "Bengali" },
+  { code: "vi-VN", label: "Vietnamese" },
+  { code: "th-TH", label: "Thai" },
 ];
 
 function VoiceToTextPage() {
@@ -65,11 +70,41 @@ function VoiceToTextPage() {
   const [transcript, setTranscript] = useState("");
   const [interim, setInterim] = useState("");
   const [lang, setLang] = useState("en-US");
+  const [outputLang, setOutputLang] = useState("en-US");
+  const [translated, setTranslated] = useState("");
+  const [translating, setTranslating] = useState(false);
+  const [translationAvailable, setTranslationAvailable] = useState(true);
   const [permissionBlocked, setPermissionBlocked] = useState(false);
   const [inIframe, setInIframe] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const finalRef = useRef<string>("");
+  const translateTimer = useRef<number | null>(null);
+
+  const sameLang = baseLang(lang) === baseLang(outputLang);
+
+  // Debounced translation whenever the transcript or target language changes.
+  useEffect(() => {
+    if (translateTimer.current) window.clearTimeout(translateTimer.current);
+    if (!transcript.trim() || sameLang) {
+      setTranslated("");
+      setTranslating(false);
+      return;
+    }
+    setTranslating(true);
+    translateTimer.current = window.setTimeout(async () => {
+      try {
+        const res = await translateText(transcript, lang, outputLang);
+        setTranslated(res.text);
+        setTranslationAvailable(res.translated);
+      } finally {
+        setTranslating(false);
+      }
+    }, 400);
+    return () => {
+      if (translateTimer.current) window.clearTimeout(translateTimer.current);
+    };
+  }, [transcript, lang, outputLang, sameLang]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -179,27 +214,47 @@ function VoiceToTextPage() {
   };
 
 
+  // The text the user sees / copies / downloads. When the target language
+  // differs and translation is available, we show that; otherwise the raw
+  // transcript.
+  const displayed = !sameLang && translated ? translated : transcript;
+
   const handleCopy = async () => {
-    const text = transcript.trim();
+    const text = displayed.trim();
     if (!text) return toast.error("Nothing to copy yet.");
     try {
       await navigator.clipboard.writeText(text);
-      toast.success("Transcript copied.");
+      toast.success("Copied.");
     } catch {
       toast.error("Copy failed.");
     }
+  };
+
+  const handleDownload = () => {
+    const text = displayed.trim();
+    if (!text) return toast.error("Nothing to download yet.");
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `aixo-transcript-${outputLang}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const handleClear = () => {
     stopListening();
     setTranscript("");
     setInterim("");
+    setTranslated("");
     finalRef.current = "";
   };
 
   const wordCount = useMemo(
-    () => transcript.trim().split(/\s+/).filter(Boolean).length,
-    [transcript],
+    () => displayed.trim().split(/\s+/).filter(Boolean).length,
+    [displayed],
   );
 
   return (
@@ -246,22 +301,53 @@ function VoiceToTextPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-card backdrop-blur sm:p-8"
         >
-          {/* Language selector */}
-          <div>
-            <Label htmlFor="lang" className="text-xs uppercase tracking-wider text-muted-foreground">
-              Recognition language
-            </Label>
-            <Select value={lang} onValueChange={setLang}>
-              <SelectTrigger id="lang" className="mt-1.5">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="max-h-72">
-                {LANGUAGES.map((l) => (
-                  <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Language selectors */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="lang" className="text-xs uppercase tracking-wider text-muted-foreground">
+                Speaking language
+              </Label>
+              <Select value={lang} onValueChange={setLang}>
+                <SelectTrigger id="lang" className="mt-1.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="outLang" className="text-xs uppercase tracking-wider text-muted-foreground">
+                Output language
+              </Label>
+              <Select value={outputLang} onValueChange={setOutputLang}>
+                <SelectTrigger id="outLang" className="mt-1.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          {/* Translation availability notice */}
+          {!sameLang && !translationAvailable && (
+            <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-3 text-xs text-muted-foreground">
+              <Languages className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand)]" />
+              <div>
+                Browser speech recognition alone can't translate between languages.
+                Connect an AI or translation API (OpenAI, Gemini, Google Cloud
+                Translation, Microsoft Translator, or DeepL) in{" "}
+                <code className="rounded bg-white/10 px-1 py-0.5">src/lib/translate.ts</code>{" "}
+                to enable native-quality translation into your selected output language.
+              </div>
+            </div>
+          )}
 
           {/* Mic button */}
           <div className="mt-8 flex flex-col items-center justify-center gap-3">
@@ -328,12 +414,22 @@ function VoiceToTextPage() {
 
           {/* Transcript */}
           <div className="mt-6">
-            <Label htmlFor="transcript" className="text-xs uppercase tracking-wider text-muted-foreground">
-              Transcript
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="transcript" className="text-xs uppercase tracking-wider text-muted-foreground">
+                {sameLang || !translated ? "Transcript" : `Translation → ${LANGUAGES.find((l) => l.code === outputLang)?.label ?? outputLang}`}
+              </Label>
+              {translating && (
+                <span className="text-xs text-muted-foreground">Translating…</span>
+              )}
+            </div>
             <textarea
               id="transcript"
-              value={transcript + (interim ? (transcript && !transcript.endsWith(" ") ? " " : "") + interim : "")}
+              value={
+                sameLang || !translated
+                  ? transcript + (interim ? (transcript && !transcript.endsWith(" ") ? " " : "") + interim : "")
+                  : translated
+              }
+              readOnly={!sameLang && !!translated}
               onChange={(e) => {
                 setTranscript(e.target.value);
                 finalRef.current = e.target.value;
@@ -356,6 +452,9 @@ function VoiceToTextPage() {
           <div className="mt-5 flex flex-wrap gap-2">
             <Button variant="outline" size="sm" onClick={handleCopy} className="active:scale-[0.97]">
               <Copy className="mr-1.5 h-4 w-4" /> Copy
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleDownload} className="active:scale-[0.97]">
+              <Download className="mr-1.5 h-4 w-4" /> Download
             </Button>
             <Button
               variant="outline"
