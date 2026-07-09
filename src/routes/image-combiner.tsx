@@ -837,8 +837,13 @@ function ImageCombinerPage() {
         </Accordion>
       </section>
 
+      {/* Above-footer ad */}
+      <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <AdPlaceholder size="leaderboard" slotId="ic-above-footer" label="Adstera Ad Placement — Above Footer" />
+      </div>
+
       {/* Footer */}
-      <footer className="border-t border-border/60">
+      <footer className="border-t border-border/60 pb-[60px] md:pb-0">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="h-7 w-7 rounded-lg bg-gradient-brand grid place-items-center">
@@ -854,8 +859,12 @@ function ImageCombinerPage() {
           </div>
         </div>
       </footer>
+
+      {/* Sticky mobile bottom ad */}
+      <StickyMobileAd />
     </div>
   );
+
 }
 
 // Unused import guard — keeps the ChevronDown available for Accordion styling in future.
