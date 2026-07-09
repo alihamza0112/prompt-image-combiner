@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import AixoLogo from "@/components/AixoLogo";
 
 export type NavItem = {
   label: string;
-  to: "/" | "/image-combiner" | "/voice-to-text";
+  to: "/" | "/image-combiner" | "/voice-to-text" | "/contact";
   hash?: string;
   exact?: boolean;
 };
@@ -15,7 +16,9 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "AI Prompt Generator", to: "/", hash: "generator" },
   { label: "Image Combiner", to: "/image-combiner" },
   { label: "AI Voice to Text", to: "/voice-to-text" },
+  { label: "Contact", to: "/contact" },
 ];
+
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
