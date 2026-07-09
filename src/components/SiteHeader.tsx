@@ -88,14 +88,6 @@ export default function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <Link
-                to="/"
-                hash="contact"
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
-              >
-                Contact
-              </Link>
             </nav>
           </motion.div>
         )}
