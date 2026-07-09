@@ -153,5 +153,28 @@
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(-40px, 20px) scale(1.08); }
 }
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes logo-glow {
+  0%, 100% { box-shadow: 0 0 18px -2px oklch(0.7 0.2 265 / 0.55), 0 0 40px -8px oklch(0.72 0.2 305 / 0.35); }
+  50% { box-shadow: 0 0 26px -2px oklch(0.7 0.2 265 / 0.75), 0 0 56px -8px oklch(0.72 0.2 305 / 0.5); }
+}
+@keyframes drag-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.7 0.2 265 / 0.45); }
+  50% { box-shadow: 0 0 0 14px oklch(0.7 0.2 265 / 0); }
+}
 .animate-float-slow { animation: float-slow 12s ease-in-out infinite; }
 .animate-float-slower { animation: float-slower 16s ease-in-out infinite; }
+.animate-logo-float { animation: logo-float 4s ease-in-out infinite; }
+.animate-logo-glow { animation: logo-glow 3.2s ease-in-out infinite; }
+.animate-drag-pulse { animation: drag-pulse 1.6s ease-out infinite; }
+
+/* Premium dark ambient background */
+.dark body {
+  background-image:
+    radial-gradient(1200px 600px at 15% -10%, oklch(0.7 0.2 265 / 0.10), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, oklch(0.72 0.2 305 / 0.10), transparent 60%);
+  background-attachment: fixed;
+}
