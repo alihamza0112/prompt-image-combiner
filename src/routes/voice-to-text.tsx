@@ -414,12 +414,22 @@ function VoiceToTextPage() {
 
           {/* Transcript */}
           <div className="mt-6">
-            <Label htmlFor="transcript" className="text-xs uppercase tracking-wider text-muted-foreground">
-              Transcript
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="transcript" className="text-xs uppercase tracking-wider text-muted-foreground">
+                {sameLang || !translated ? "Transcript" : `Translation → ${LANGUAGES.find((l) => l.code === outputLang)?.label ?? outputLang}`}
+              </Label>
+              {translating && (
+                <span className="text-xs text-muted-foreground">Translating…</span>
+              )}
+            </div>
             <textarea
               id="transcript"
-              value={transcript + (interim ? (transcript && !transcript.endsWith(" ") ? " " : "") + interim : "")}
+              value={
+                sameLang || !translated
+                  ? transcript + (interim ? (transcript && !transcript.endsWith(" ") ? " " : "") + interim : "")
+                  : translated
+              }
+              readOnly={!sameLang && !!translated}
               onChange={(e) => {
                 setTranscript(e.target.value);
                 finalRef.current = e.target.value;
@@ -442,6 +452,9 @@ function VoiceToTextPage() {
           <div className="mt-5 flex flex-wrap gap-2">
             <Button variant="outline" size="sm" onClick={handleCopy} className="active:scale-[0.97]">
               <Copy className="mr-1.5 h-4 w-4" /> Copy
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleDownload} className="active:scale-[0.97]">
+              <Download className="mr-1.5 h-4 w-4" /> Download
             </Button>
             <Button
               variant="outline"
