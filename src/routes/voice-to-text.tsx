@@ -301,22 +301,53 @@ function VoiceToTextPage() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-card backdrop-blur sm:p-8"
         >
-          {/* Language selector */}
-          <div>
-            <Label htmlFor="lang" className="text-xs uppercase tracking-wider text-muted-foreground">
-              Recognition language
-            </Label>
-            <Select value={lang} onValueChange={setLang}>
-              <SelectTrigger id="lang" className="mt-1.5">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="max-h-72">
-                {LANGUAGES.map((l) => (
-                  <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Language selectors */}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="lang" className="text-xs uppercase tracking-wider text-muted-foreground">
+                Speaking language
+              </Label>
+              <Select value={lang} onValueChange={setLang}>
+                <SelectTrigger id="lang" className="mt-1.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="outLang" className="text-xs uppercase tracking-wider text-muted-foreground">
+                Output language
+              </Label>
+              <Select value={outputLang} onValueChange={setOutputLang}>
+                <SelectTrigger id="outLang" className="mt-1.5">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-72">
+                  {LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>{l.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          {/* Translation availability notice */}
+          {!sameLang && !translationAvailable && (
+            <div className="mt-4 flex items-start gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-3 text-xs text-muted-foreground">
+              <Languages className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--brand)]" />
+              <div>
+                Browser speech recognition alone can't translate between languages.
+                Connect an AI or translation API (OpenAI, Gemini, Google Cloud
+                Translation, Microsoft Translator, or DeepL) in{" "}
+                <code className="rounded bg-white/10 px-1 py-0.5">src/lib/translate.ts</code>{" "}
+                to enable native-quality translation into your selected output language.
+              </div>
+            </div>
+          )}
 
           {/* Mic button */}
           <div className="mt-8 flex flex-col items-center justify-center gap-3">
