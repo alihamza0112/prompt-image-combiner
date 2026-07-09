@@ -65,6 +65,8 @@ function VoiceToTextPage() {
   const [transcript, setTranscript] = useState("");
   const [interim, setInterim] = useState("");
   const [lang, setLang] = useState("en-US");
+  const [permissionBlocked, setPermissionBlocked] = useState(false);
+  const [inIframe, setInIframe] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const finalRef = useRef<string>("");
@@ -73,15 +75,58 @@ function VoiceToTextPage() {
     if (typeof window === "undefined") return;
     const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     setSupported(Boolean(SR));
+    try {
+      setInIframe(window.self !== window.top);
+    } catch {
+      setInIframe(true); // cross-origin access to top → definitely iframed
+    }
   }, []);
 
-  const startListening = () => {
+  const ensureMicPermission = async (): Promise<boolean> => {
+    // Pre-flight the mic via getUserMedia so we get a precise error (NotAllowed,
+    // Dismissed, iframe permissions-policy block) BEFORE SpeechRecognition
+    // starts. In a sandboxed iframe without `allow="microphone"` this fails
+    // deterministically, letting us tell the user to open the app in a new tab.
+    if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
+      return true; // let SpeechRecognition try; onerror will handle it
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Immediately release — SpeechRecognition opens its own stream.
+      stream.getTracks().forEach((t) => t.stop());
+      setPermissionBlocked(false);
+      return true;
+    } catch (err: any) {
+      const name = err?.name || "";
+      if (name === "NotAllowedError" || name === "SecurityError") {
+        setPermissionBlocked(true);
+        toast.error(
+          inIframe
+            ? "Microphone is blocked inside the preview. Open the site in a new tab to use it."
+            : "Microphone permission was denied. Allow mic access in your browser's site settings.",
+        );
+      } else if (name === "NotFoundError" || name === "OverconstrainedError") {
+        toast.error("No microphone was found on this device.");
+      } else if (name === "NotReadableError") {
+        toast.error("Your microphone is being used by another app.");
+      } else {
+        toast.error(`Microphone error: ${name || "unknown"}`);
+      }
+      return false;
+    }
+  };
+
+  const startListening = async () => {
     if (typeof window === "undefined") return;
     const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) {
       toast.error("Speech recognition is not supported in this browser.");
       return;
     }
+
+    const allowed = await ensureMicPermission();
+    if (!allowed) return;
+
     const rec = new SR();
     rec.lang = lang;
     rec.continuous = true;
@@ -103,8 +148,13 @@ function VoiceToTextPage() {
 
     rec.onerror = (e: any) => {
       if (e?.error === "not-allowed" || e?.error === "service-not-allowed") {
-        toast.error("Microphone permission was denied.");
-      } else if (e?.error !== "no-speech") {
+        setPermissionBlocked(true);
+        toast.error(
+          inIframe
+            ? "Microphone is blocked in the preview iframe. Open in a new tab."
+            : "Microphone permission was denied.",
+        );
+      } else if (e?.error !== "no-speech" && e?.error !== "aborted") {
         toast.error(`Recognition error: ${e?.error ?? "unknown"}`);
       }
     };
@@ -127,6 +177,7 @@ function VoiceToTextPage() {
     try { recognitionRef.current?.stop(); } catch {}
     setListening(false);
   };
+
 
   const handleCopy = async () => {
     const text = transcript.trim();
