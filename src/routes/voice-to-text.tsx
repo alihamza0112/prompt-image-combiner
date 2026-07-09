@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Toaster, toast } from "sonner";
-import { Mic, MicOff, Copy, Trash2, AlertCircle } from "lucide-react";
+import { Mic, MicOff, Copy, Trash2, AlertCircle, Download, Languages } from "lucide-react";
+import { translateText, baseLang } from "@/lib/translate";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -57,6 +58,10 @@ const LANGUAGES: { code: string; label: string }[] = [
   { code: "zh-CN", label: "Chinese (Simplified)" },
   { code: "zh-TW", label: "Chinese (Traditional)" },
   { code: "id-ID", label: "Indonesian" },
+  { code: "ur-PK", label: "Urdu" },
+  { code: "bn-IN", label: "Bengali" },
+  { code: "vi-VN", label: "Vietnamese" },
+  { code: "th-TH", label: "Thai" },
 ];
 
 function VoiceToTextPage() {
@@ -65,11 +70,41 @@ function VoiceToTextPage() {
   const [transcript, setTranscript] = useState("");
   const [interim, setInterim] = useState("");
   const [lang, setLang] = useState("en-US");
+  const [outputLang, setOutputLang] = useState("en-US");
+  const [translated, setTranslated] = useState("");
+  const [translating, setTranslating] = useState(false);
+  const [translationAvailable, setTranslationAvailable] = useState(true);
   const [permissionBlocked, setPermissionBlocked] = useState(false);
   const [inIframe, setInIframe] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const finalRef = useRef<string>("");
+  const translateTimer = useRef<number | null>(null);
+
+  const sameLang = baseLang(lang) === baseLang(outputLang);
+
+  // Debounced translation whenever the transcript or target language changes.
+  useEffect(() => {
+    if (translateTimer.current) window.clearTimeout(translateTimer.current);
+    if (!transcript.trim() || sameLang) {
+      setTranslated("");
+      setTranslating(false);
+      return;
+    }
+    setTranslating(true);
+    translateTimer.current = window.setTimeout(async () => {
+      try {
+        const res = await translateText(transcript, lang, outputLang);
+        setTranslated(res.text);
+        setTranslationAvailable(res.translated);
+      } finally {
+        setTranslating(false);
+      }
+    }, 400);
+    return () => {
+      if (translateTimer.current) window.clearTimeout(translateTimer.current);
+    };
+  }, [transcript, lang, outputLang, sameLang]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
