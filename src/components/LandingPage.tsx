@@ -2,7 +2,21 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { Toaster } from "sonner";
-import { Sparkles, Zap, Shield, Gift, Layers, Wand2, ArrowRight } from "lucide-react";
+import {
+  Sparkles,
+  Zap,
+  Shield,
+  Gift,
+  Layers,
+  Wand2,
+  ArrowRight,
+  Palette,
+  GraduationCap,
+  Briefcase,
+  Megaphone,
+  Code2,
+  PenLine,
+} from "lucide-react";
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
@@ -10,77 +24,54 @@ import {
   CardGrid,
   CtaSection,
   FaqSection,
-  LongForm,
   SectionHeading,
+  StepsSection,
   type Card,
+  type Step,
 } from "@/components/PageSections";
 
 const WHY_CARDS: Card[] = [
-  {
-    icon: Zap,
-    title: "Fast",
-    text: "Every tool loads in under a second and runs instantly in your browser — no queues, no waiting rooms, no throttled tiers.",
-  },
-  {
-    icon: Shield,
-    title: "Private",
-    text: "Files and prompts are processed locally where possible. Nothing is uploaded, stored, or tracked in the background.",
-  },
-  {
-    icon: Gift,
-    title: "Free",
-    text: "Every AIXO tool is 100% free forever. No signup, no watermark, no credit card, no daily limits.",
-  },
+  { icon: Zap, title: "Lightning Fast", text: "Every tool loads in under a second. No queues, no throttling." },
+  { icon: Shield, title: "Private by Design", text: "Files stay in your browser. Nothing uploaded, nothing tracked." },
+  { icon: Gift, title: "Always Free", text: "No signup, no watermark, no credit card, ever." },
 ];
 
-type ToolCard = {
-  icon: typeof Layers;
-  title: string;
-  description: string;
-  to: "/image-combiner" | "/prompt-generator";
-  cta: string;
-};
-
-const TOOLS: ToolCard[] = [
+const TOOLS = [
   {
     icon: Layers,
     title: "AI Image Combiner",
-    description:
-      "Drop unlimited photos, arrange them into a clean grid, and export one polished merged image — all in your browser.",
-    to: "/image-combiner",
-    cta: "Open Tool",
+    description: "Merge unlimited images into one clean grid — instantly.",
+    to: "/image-combiner" as const,
   },
   {
     icon: Wand2,
     title: "AI Prompt Generator",
-    description:
-      "Turn rough ideas into structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages.",
-    to: "/prompt-generator",
-    cta: "Open Tool",
+    description: "Turn rough ideas into expert prompts for ChatGPT, Claude & Midjourney.",
+    to: "/prompt-generator" as const,
   },
 ];
 
+const STEPS: Step[] = [
+  { title: "Pick a Tool", text: "Choose Image Combiner or Prompt Generator from the toolkit." },
+  { title: "Do Your Thing", text: "Upload, tweak, or type. Every option is one click away." },
+  { title: "Export Instantly", text: "Download or copy your result — no signup, no wait." },
+];
+
+const PERFECT_FOR: Card[] = [
+  { icon: Palette, title: "Designers", text: "Assemble reference boards and moodgrids in seconds." },
+  { icon: GraduationCap, title: "Students", text: "Merge study sheets and craft AI research prompts." },
+  { icon: Briefcase, title: "Freelancers", text: "Deliver polished before/after shots to clients fast." },
+  { icon: Megaphone, title: "Marketers", text: "Build product grids and generate campaign copy prompts." },
+  { icon: Code2, title: "Developers", text: "Prompt AI models for cleaner code, tests, and reviews." },
+  { icon: PenLine, title: "Creators", text: "Ship content, thumbnails, and captions without the friction." },
+];
+
 const FAQS = [
-  {
-    q: "What is AIXO?",
-    a: "AIXO is a premium micro SaaS toolkit that packages fast, free, browser-based AI utilities into one clean home — starting with an Image Combiner and an AI Prompt Generator.",
-  },
-  {
-    q: "Do I need to create an account?",
-    a: "No. AIXO is 100% account-free. Open a tool page and start using it immediately — no signup, no email verification, no credit card.",
-  },
-  {
-    q: "Which tools are available today?",
-    a: "AIXO currently ships with the AI Image Combiner and the AI Prompt Generator. More utilities are on the roadmap and will appear on the home page as they launch.",
-  },
-  {
-    q: "How is AIXO different from other AI websites?",
-    a: "AIXO focuses on speed, privacy, and a single cohesive experience. Every tool loads instantly, works offline after first load, and processes your data locally in the browser whenever possible.",
-  },
-  {
-    q: "Is AIXO safe for confidential work?",
-    a: "Yes. Because processing happens client-side, your files and prompts never leave your device, making AIXO safe for freelance client work, internal team assets, and personal media.",
-  },
+  { q: "What is AIXO?", a: "A premium micro SaaS toolkit of fast, free, browser-based AI utilities — starting with Image Combiner and Prompt Generator." },
+  { q: "Do I need an account?", a: "No. Open a tool and start using it. No signup, no email, no credit card." },
+  { q: "Is my data safe?", a: "Yes. Processing happens client-side wherever possible — your files never leave your device." },
+  { q: "How is AIXO different?", a: "Speed, privacy, and one cohesive experience. Every tool loads instantly and shares the same clean UI." },
+  { q: "Are more tools coming?", a: "Yes. Background remover, PDF utility, and an AI writing assistant are on the roadmap." },
 ];
 
 export default function LandingPage() {
@@ -92,7 +83,6 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen bg-background pb-[60px] text-foreground antialiased md:pb-0">
       <Toaster position="top-center" richColors theme="dark" />
-
       <SiteHeader />
 
       {/* Hero */}
@@ -112,42 +102,26 @@ export default function LandingPage() {
             A premium AI toolkit — <span className="text-gradient-brand">AIXO</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Fast, focused AI tools for creators, students, and professionals. No signup, no watermarks, no data harvesting.
+            Fast, focused AI tools for creators, students, and professionals.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <Button
-              asChild
-              size="lg"
-              className="h-12 px-6 bg-gradient-brand text-white shadow-glow transition-all hover:opacity-95 hover:scale-[1.02] active:scale-[0.97]"
-            >
-              <Link to="/image-combiner">
-                Explore the Tools <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+            <Button asChild size="lg" className="h-12 px-6 bg-gradient-brand text-white shadow-glow transition-all hover:opacity-95 hover:scale-[1.02] active:scale-[0.97]">
+              <Link to="/image-combiner">Explore the Tools <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-12 border-white/15 bg-white/[0.03] px-6 hover:bg-white/[0.06]"
-            >
+            <Button asChild size="lg" variant="outline" className="h-12 border-white/15 bg-white/[0.03] px-6 hover:bg-white/[0.06]">
               <Link to="/about">About AIXO</Link>
             </Button>
           </div>
         </motion.div>
       </section>
 
-      {/* Ad — below hero */}
       <div className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="home-below-hero" label="Adstera Ad Placement — Below Hero" />
       </div>
 
-      {/* Our AI Tools */}
+      {/* Tool cards */}
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Our AI Tools"
-          title="A curated toolkit, not a bloated dashboard"
-          subtitle="Pick a tool and start working — every utility opens in one click."
-        />
+        <SectionHeading eyebrow="Our AI Tools" title="A curated toolkit" subtitle="Pick a tool and start working — one click, zero friction." />
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {TOOLS.map((t, i) => (
             <motion.div
@@ -165,17 +139,9 @@ export default function LandingPage() {
                   <t.icon className="h-5 w-5 text-white" />
                 </span>
                 <h3 className="mt-5 text-xl font-semibold tracking-tight">{t.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {t.description}
-                </p>
-                <Button
-                  asChild
-                  size="sm"
-                  className="mt-6 h-10 px-4 bg-gradient-brand text-white shadow-glow transition-all hover:opacity-95 hover:scale-[1.02]"
-                >
-                  <Link to={t.to}>
-                    {t.cta} <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t.description}</p>
+                <Button asChild size="sm" className="mt-6 h-10 px-4 bg-gradient-brand text-white shadow-glow transition-all hover:opacity-95 hover:scale-[1.02]">
+                  <Link to={t.to}>Open Tool <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </div>
             </motion.div>
@@ -183,39 +149,28 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Ad — between sections */}
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="home-mid" label="Adstera Ad Placement — Mid Page" />
       </div>
 
-      {/* Why choose AIXO */}
+      {/* Why choose */}
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Why choose AIXO"
-          title="Fast. Private. Free."
-          subtitle="Three promises that stay true across every tool in the toolkit."
-        />
-        <div className="mt-10">
-          <CardGrid cards={WHY_CARDS} />
-        </div>
+        <SectionHeading eyebrow="Why choose AIXO" title="Fast. Private. Free." />
+        <div className="mt-10"><CardGrid cards={WHY_CARDS} /></div>
       </section>
 
-      {/* How AIXO Helps — long form SEO */}
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <LongForm
-          eyebrow="How AIXO helps"
-          title="A modern toolkit for modern work"
-          paragraphs={[
-            "The modern creator's workflow is scattered across a dozen websites. One tab merges screenshots, another cleans up a photo, a third helps rewrite a caption, and a fourth drafts a prompt for ChatGPT. Every tool has its own login, its own quota, and its own quirks — and by the time you switch between them, you've lost the thread of what you were actually trying to make. <strong>AIXO</strong> was built to collapse that mess into one calm, focused home.",
-            "The <strong>AI Image Combiner</strong> is perfect for anyone who works with lots of visuals — designers assembling reference boards, students preparing study sheets, marketers building product grids, or freelancers packaging before-and-after shots for clients. Instead of emailing five loose files, you deliver one clean, structured image that's smaller, easier to read, and instantly more professional.",
-            "The <strong>AI Prompt Generator</strong> is a shortcut to better AI results. Whether you're briefing ChatGPT for a blog outline, Claude for a code refactor, Midjourney for a hero image, or Gemini for research, a well-structured prompt is the difference between generic output and expert work. AIXO turns a rough idea into a role, context, task, constraints, and output format in seconds — no prompt engineering course required.",
-            "What ties everything together is a shared philosophy: <strong>respect the user</strong>. That means no forced signups, no dark patterns, no upsell popups, and no invisible data pipelines mining your inputs. It also means design that feels premium — a modern dark UI, smooth Framer Motion animations, thoughtful spacing, and typography that stays readable on every device from a phone in bright sunlight to a 4K monitor at midnight.",
-            "AIXO is growing fast. A background remover, a smart PDF utility, an AI writing assistant, and offline-first versions of today's tools are all on the roadmap. Every new addition will follow the same rules — free, private, browser-based, and instantly usable. Bookmark the home page and check back often; the toolkit you rely on tomorrow is being built here today.",
-          ]}
-        />
+      {/* How it works */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="How it works" title="Three steps. That's it." />
+        <div className="mt-10"><StepsSection steps={STEPS} /></div>
       </section>
 
-      {/* Ad — above CTA */}
+      {/* Perfect For */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Perfect for" title="Built for how you actually work" />
+        <div className="mt-10"><CardGrid cards={PERFECT_FOR} /></div>
+      </section>
+
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="home-pre-faq" label="Adstera Ad Placement — Above FAQ" />
       </div>
@@ -224,12 +179,11 @@ export default function LandingPage() {
 
       <CtaSection
         title="Ready to try the AIXO toolkit?"
-        subtitle="Open a tool and start creating — it's free, private, and takes seconds."
+        subtitle="Open a tool and start creating — free, private, seconds."
         primary={{ label: "Open Image Combiner", to: "/image-combiner" }}
         secondary={{ label: "Try Prompt Generator", to: "/prompt-generator" }}
       />
 
-      {/* Above-footer ad */}
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="leaderboard" slotId="home-above-footer" label="Adstera Ad Placement — Above Footer" />
       </div>
