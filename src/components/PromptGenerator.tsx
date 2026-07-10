@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import {
   Sparkles, Copy, RefreshCw, Trash2, Wand2, Check, ChevronsUpDown,
 } from "lucide-react";
@@ -12,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import {
   Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
 } from "@/components/ui/command";
+import { generatePromptFn } from "@/lib/generate-prompt.functions";
 
 
 /**
@@ -653,27 +655,15 @@ export default function PromptGenerator() {
   const [outputLang, setOutputLang] = useState<Language>(LANGUAGES[0]);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
+  const generate = useServerFn(generatePromptFn);
 
   const inputLang = useMemo(
     () => detectInputLanguage(`${title} ${goal}`),
     [title, goal],
   );
 
-  const args = useMemo<BuildArgs>(() => ({
-    title,
-    goal,
-    platform: "ChatGPT",
-    style: "Professional",
-    quality: "Advanced",
-    inputLang,
-    outputLang,
-  }), [title, goal, inputLang, outputLang]);
-
   const dir = RTL.has(outputLang.code) ? "rtl" : "ltr";
   const inputDir = RTL.has(inputLang.code) ? "rtl" : "ltr";
-
-
-
 
   const handleGenerate = async () => {
     if (!title.trim()) return toast.error("Please add a prompt title.");
@@ -681,10 +671,19 @@ export default function PromptGenerator() {
     setLoading(true);
     setResult("");
     try {
-      const out = await generatePromptLocal(args);
-      setResult(out);
-    } catch {
-      toast.error("Something went wrong. Please try again.");
+      const out = await generate({
+        data: {
+          title: title.trim(),
+          goal: goal.trim(),
+          outputLanguageName: outputLang.name,
+          outputLanguageNative: outputLang.native,
+          outputLanguageCode: outputLang.code,
+        },
+      });
+      setResult(out.text);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
