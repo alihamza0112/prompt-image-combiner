@@ -1,7 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Toaster } from "sonner";
-import { Wand2, Youtube, Search, Megaphone, Code2 } from "lucide-react";
+import {
+  Wand2,
+  Youtube,
+  Search,
+  Megaphone,
+  Code2,
+  PenLine,
+  Image as ImageIcon,
+  Mail,
+  Target,
+  Layers,
+  Sparkles,
+  MessageSquare,
+} from "lucide-react";
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
 import PromptGenerator from "@/components/PromptGenerator";
@@ -9,7 +22,6 @@ import {
   CardGrid,
   CtaSection,
   FaqSection,
-  LongForm,
   SectionHeading,
   type Card,
 } from "@/components/PageSections";
@@ -19,96 +31,56 @@ export const Route = createFileRoute("/prompt-generator")({
   head: () => ({
     meta: [
       { title: "AI Prompt Generator — Free ChatGPT & Midjourney Prompt Builder | AIXO" },
-      {
-        name: "description",
-        content:
-          "Free AI Prompt Generator by AIXO. Build structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages — no signup.",
-      },
+      { name: "description", content: "Free AI Prompt Generator by AIXO. Build structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages." },
       { property: "og:title", content: "AI Prompt Generator — AIXO" },
-      {
-        property: "og:description",
-        content: "Structured, high-quality AI prompts in 20+ languages — free and instant.",
-      },
+      { property: "og:description", content: "Structured, high-quality AI prompts in 20+ languages — free and instant." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://prompt-sparkle-ai-37.lovable.app/prompt-generator" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "AI Prompt Generator — AIXO" },
-      {
-        name: "twitter:description",
-        content: "Structured, high-quality AI prompts in 20+ languages.",
-      },
+      { name: "twitter:description", content: "Structured, high-quality AI prompts in 20+ languages." },
     ],
     links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/prompt-generator" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          name: "AIXO Prompt Generator",
-          applicationCategory: "ProductivityApplication",
-          operatingSystem: "Web",
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-          description:
-            "Free structured AI prompt builder for ChatGPT, Claude, Gemini, and Midjourney.",
-        }),
-      },
-    ],
   }),
 });
 
-const USE_CASES: Card[] = [
-  {
-    icon: Youtube,
-    title: "YouTube",
-    text: "Generate video titles, hooks, scripts, descriptions, and thumbnail concepts that boost click-through and watch time.",
-  },
-  {
-    icon: Search,
-    title: "SEO",
-    text: "Craft prompts for keyword research, meta titles, blog outlines, and on-page content that ranks and converts.",
-  },
-  {
-    icon: Megaphone,
-    title: "Marketing",
-    text: "Build prompts for ad copy, landing pages, email sequences, and social captions with a consistent brand voice.",
-  },
-  {
-    icon: Code2,
-    title: "Coding",
-    text: "Produce clear, contextual coding prompts for bug fixes, refactors, tests, and architecture reviews.",
-  },
+const BEST_FOR: Card[] = [
+  { icon: Youtube, title: "YouTube", text: "Titles, hooks, scripts, and thumbnail concepts that convert." },
+  { icon: Search, title: "SEO", text: "Meta titles, outlines, and on-page content that ranks." },
+  { icon: Megaphone, title: "Marketing", text: "Ads, emails, and social captions with a consistent voice." },
+  { icon: Code2, title: "Coding", text: "Bug fixes, refactors, tests, and architecture reviews." },
+];
+
+const POPULAR_TYPES: Card[] = [
+  { icon: PenLine, title: "Blog & Article", text: "Long-form outlines, intros, and full article drafts." },
+  { icon: ImageIcon, title: "Image Prompts", text: "Midjourney, DALL·E, and Stable Diffusion prompts." },
+  { icon: Mail, title: "Email Copy", text: "Cold outreach, newsletters, and product announcements." },
+  { icon: MessageSquare, title: "Social Posts", text: "Threads, captions, and short-form hooks that stop scrolls." },
+  { icon: Code2, title: "Code Prompts", text: "Contextual dev tasks with clear constraints and formats." },
+  { icon: Sparkles, title: "Creative", text: "Story ideas, character briefs, and worldbuilding prompts." },
+];
+
+const PROMPT_TIPS: Card[] = [
+  { icon: Target, title: "Be Specific", text: "Swap vague adjectives for concrete numbers, audiences, and formats." },
+  { icon: Layers, title: "Add Structure", text: "Give a role, context, task, constraints, and output format." },
+  { icon: Sparkles, title: "Iterate Fast", text: "Treat the first output as a draft — refine with follow-ups." },
+];
+
+const FEATURES: Card[] = [
+  { icon: Wand2, title: "20+ Languages", text: "Generate prompts in English, Spanish, Urdu, Chinese, and more." },
+  { icon: Layers, title: "Structured Output", text: "Role, context, task, constraints, and format — every time." },
+  { icon: Sparkles, title: "Any AI Model", text: "Works with ChatGPT, Claude, Gemini, Grok, and image models." },
+  { icon: Target, title: "One-Click Copy", text: "Copy the polished prompt and paste it anywhere." },
 ];
 
 const FAQS = [
-  {
-    q: "What is an AI Prompt Generator?",
-    a: "An AI Prompt Generator turns a rough idea into a structured, high-quality prompt that language models like ChatGPT, Claude, Gemini, or image models like Midjourney can execute reliably.",
-  },
-  {
-    q: "Is the AIXO Prompt Generator free?",
-    a: "Yes. It's 100% free with no signup, no daily limits, and no watermarks on the output.",
-  },
-  {
-    q: "Which AI models does it support?",
-    a: "The generator produces prompts that work with any modern LLM — ChatGPT, Claude, Gemini, Grok, and open-source models — plus image models like Midjourney, DALL·E, and Stable Diffusion.",
-  },
-  {
-    q: "Can I generate prompts in different languages?",
-    a: "Yes. AIXO supports 20+ output languages, so you can produce prompts in English, Spanish, French, German, Arabic, Hindi, Urdu, Chinese, Japanese, and more.",
-  },
-  {
-    q: "How is a good prompt different from a bad one?",
-    a: "Good prompts give the model a clear role, specific context, an exact task, constraints, and a desired output format. Weak prompts skip most of these and rely on guessing.",
-  },
-  {
-    q: "Do you store my prompts on a server?",
-    a: "No. Prompt generation happens in your browser session and nothing is stored on our side.",
-  },
-  {
-    q: "Can I use these prompts commercially?",
-    a: "Yes. You own everything you create with AIXO and can use it in client work, courses, and products.",
-  },
+  { q: "What is an AI Prompt Generator?", a: "A tool that turns a rough idea into a structured prompt any modern AI model can execute reliably." },
+  { q: "Is it free?", a: "Yes — 100% free, no signup, no daily limits, no watermark." },
+  { q: "Which models does it support?", a: "Any modern LLM (ChatGPT, Claude, Gemini, Grok) plus image models like Midjourney, DALL·E, and Stable Diffusion." },
+  { q: "Which languages are supported?", a: "20+ output languages including English, Spanish, French, German, Arabic, Hindi, Urdu, Chinese, and Japanese." },
+  { q: "What makes a good prompt?", a: "A clear role, specific context, exact task, constraints, and a defined output format." },
+  { q: "Are prompts stored on a server?", a: "No — generation happens in your browser session, nothing is stored." },
+  { q: "Can I use prompts commercially?", a: "Yes. You own what you create with AIXO and can use it in any project." },
 ];
 
 function PromptGeneratorPage() {
@@ -128,18 +100,17 @@ function PromptGeneratorPage() {
           className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
-            <Wand2 className="h-3.5 w-3.5" /> Structured prompts · 20+ languages
+            <Wand2 className="h-3.5 w-3.5" /> Structured · 20+ languages
           </span>
           <h1 className="mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl">
             <span className="text-gradient-brand">AI Prompt Generator</span>
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-base text-muted-foreground sm:text-lg">
-            Craft expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney — instantly.
+            Turn rough ideas into expert-level prompts — instantly.
           </p>
         </motion.div>
       </section>
 
-      {/* Ad — below hero */}
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="pg-below-hero" label="Adstera Ad Placement — Below Hero" />
       </div>
@@ -149,39 +120,34 @@ function PromptGeneratorPage() {
         <PromptGenerator />
       </section>
 
-      {/* Ad — between tool and features */}
       <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="pg-post-tool" label="Adstera Ad Placement — Between Tool and Features" />
       </div>
 
-      {/* Popular use cases */}
+      {/* Best For */}
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Use cases"
-          title="Popular use cases"
-          subtitle="From content creation to code — one generator, endless workflows."
-        />
-        <div className="mt-10">
-          <CardGrid cards={USE_CASES} cols={4} />
-        </div>
+        <SectionHeading eyebrow="Best for" title="Who uses AIXO prompts" />
+        <div className="mt-10"><CardGrid cards={BEST_FOR} cols={4} /></div>
       </section>
 
-      {/* Long form guide */}
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <LongForm
-          eyebrow="Prompt Engineering"
-          title="How to write better AI prompts"
-          paragraphs={[
-            "<strong>Prompt engineering</strong> is the practice of shaping instructions so an AI model produces exactly what you want. The same model can feel brilliant or useless depending on how you brief it — a strong prompt is the difference between generic output and expert-level results.",
-            "Every effective prompt has five moving parts: a <strong>role</strong> that tells the model who it is (\"You are a senior copywriter\"), <strong>context</strong> that grounds the task (audience, brand voice, product), a <strong>clear task</strong> (\"Write three subject lines\"), <strong>constraints</strong> (length, tone, format, forbidden words), and a defined <strong>output structure</strong> (markdown, JSON, bullet list). Leave any one out and the model has to guess.",
-            "The best practices are simple. Be <strong>specific</strong> — replace \"write a blog post\" with \"write a 700-word blog post for beginner React developers about useEffect pitfalls, with three code examples.\" Give <strong>examples</strong> when possible — a single sample output teaches the model your standard faster than any adjective. <strong>Iterate</strong> — treat the first response as a draft, then refine with follow-up instructions like \"tighter, less formal, add a hook.\"",
-            "Common <strong>mistakes</strong>: asking multiple unrelated questions at once, using vague adjectives (\"make it good\"), forgetting to specify the audience, mixing English with other languages inconsistently, and skipping the output format so the model returns prose when you needed a table. Another frequent trap is over-restricting the model with contradictory constraints (\"formal but funny, short but thorough\") — pick one direction and commit.",
-            "The <strong>AIXO Prompt Generator</strong> handles all of this for you. Describe your goal, pick a category, a tone, and an output language, and it assembles a professionally structured prompt in seconds — ready to paste into ChatGPT, Claude, Gemini, Midjourney, or any other AI tool. Whether you're a marketer, developer, student, or founder, better prompts mean better results, less rework, and dramatically faster workflows.",
-          ]}
-        />
+      {/* Popular Prompt Types */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Popular types" title="Prompts for every workflow" />
+        <div className="mt-10"><CardGrid cards={POPULAR_TYPES} /></div>
       </section>
 
-      {/* Ad — above FAQ */}
+      {/* Prompt Tips */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Prompt tips" title="Three rules for better output" />
+        <div className="mt-10"><CardGrid cards={PROMPT_TIPS} /></div>
+      </section>
+
+      {/* Features */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Features" title="Everything you need built-in" />
+        <div className="mt-10"><CardGrid cards={FEATURES} cols={4} /></div>
+      </section>
+
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="pg-pre-faq" label="Adstera Ad Placement — Above FAQ" />
       </div>
