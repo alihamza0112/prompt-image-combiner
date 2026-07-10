@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { CopyButton } from "@/components/CopyButton";
 
 type UploadedImage = {
   id: string;
