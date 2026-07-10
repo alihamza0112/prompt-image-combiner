@@ -1,43 +1,155 @@
-type Props = { className?: string };
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Premium "A" mark with blue→purple gradient, node accent, and orbit ring.
-export default function AixoLogo({ className }: Props) {
+type Props = {
+  className?: string;
+  /** Show cycling text (A → AI → AIXO) inside the circle. Off for tiny sizes. */
+  animatedText?: boolean;
+  /** Show orbiting glowing dots around the ring. */
+  orbit?: boolean;
+};
+
+const CYCLE = ["A", "AI", "AIXO"];
+
+/**
+ * AIXO circular mark — glassmorphism disc with a blue→purple gradient,
+ * soft glow, animated cycling text inside, and orbiting particles.
+ */
+export default function AixoLogo({
+  className,
+  animatedText = true,
+  orbit = true,
+}: Props) {
+  const [i, setI] = useState(0);
+
+  useEffect(() => {
+    if (!animatedText) return;
+    const id = setInterval(() => setI((v) => (v + 1) % CYCLE.length), 2200);
+    return () => clearInterval(id);
+  }, [animatedText]);
+
   return (
-    <svg
-      viewBox="0 0 32 32"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
+    <span
+      className={`relative inline-grid place-items-center ${className ?? ""}`}
+      aria-label="AIXO"
     >
-      <defs>
-        <linearGradient id="aixo-a" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#ffffff" stopOpacity="1" />
-          <stop offset="1" stopColor="#e9ecff" stopOpacity="0.92" />
-        </linearGradient>
-        <linearGradient id="aixo-node" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#93c5fd" />
-          <stop offset="1" stopColor="#c4b5fd" />
-        </linearGradient>
-        <filter id="aixo-glow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="0.8" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
+      <svg
+        viewBox="0 0 64 64"
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="aixo-disc" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#3b82f6" />
+            <stop offset="1" stopColor="#a855f7" />
+          </linearGradient>
+          <linearGradient id="aixo-ring" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#93c5fd" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#c4b5fd" stopOpacity="0.9" />
+          </linearGradient>
+          <radialGradient id="aixo-glass" cx="35%" cy="30%" r="70%">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0.55" />
+            <stop offset="0.55" stopColor="#ffffff" stopOpacity="0.08" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </radialGradient>
+          <filter id="aixo-blur" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.4" />
+          </filter>
+        </defs>
 
-      {/* Letter A */}
-      <g filter="url(#aixo-glow)">
-        <path
-          d="M6 25.5 L15 5.5 L17 5.5 L26 25.5 L22.4 25.5 L20.6 21 L11.4 21 L9.6 25.5 Z M12.9 17.8 L19.1 17.8 L16 10.4 Z"
-          fill="url(#aixo-a)"
-        />
-      </g>
+        {/* Soft outer glow */}
+        <circle cx="32" cy="32" r="28" fill="url(#aixo-disc)" opacity="0.35" filter="url(#aixo-blur)" />
+        {/* Gradient disc */}
+        <circle cx="32" cy="32" r="26" fill="url(#aixo-disc)" />
+        {/* Glass highlight */}
+        <circle cx="32" cy="32" r="26" fill="url(#aixo-glass)" />
+        {/* Inner rim for depth */}
+        <circle cx="32" cy="32" r="25.2" fill="none" stroke="#ffffff" strokeOpacity="0.25" strokeWidth="0.6" />
+        {/* Outer animated ring */}
+        <circle
+          cx="32"
+          cy="32"
+          r="30"
+          fill="none"
+          stroke="url(#aixo-ring)"
+          strokeOpacity="0.55"
+          strokeWidth="0.8"
+          strokeDasharray="2 4"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 32 32"
+            to="360 32 32"
+            dur="18s"
+            repeatCount="indefinite"
+          />
+        </circle>
 
-      {/* Orbit ring + node */}
-      <circle cx="24.5" cy="7.5" r="4.2" fill="none" stroke="url(#aixo-node)" strokeOpacity="0.7" strokeWidth="0.9" />
-      <circle cx="24.5" cy="7.5" r="2.1" fill="url(#aixo-node)" />
-    </svg>
+        {/* Orbiting particles */}
+        {orbit && (
+          <g>
+            <g>
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 32 32"
+                to="360 32 32"
+                dur="9s"
+                repeatCount="indefinite"
+              />
+              <circle cx="32" cy="2" r="1.4" fill="#e9d5ff" />
+              <circle cx="32" cy="2" r="2.8" fill="#a855f7" opacity="0.35" />
+            </g>
+            <g>
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="120 32 32"
+                to="480 32 32"
+                dur="13s"
+                repeatCount="indefinite"
+              />
+              <circle cx="32" cy="2" r="1.1" fill="#bfdbfe" />
+              <circle cx="32" cy="2" r="2.4" fill="#3b82f6" opacity="0.3" />
+            </g>
+            <g>
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="240 32 32"
+                to="600 32 32"
+                dur="16s"
+                repeatCount="indefinite"
+              />
+              <circle cx="32" cy="2" r="0.9" fill="#ffffff" opacity="0.85" />
+            </g>
+          </g>
+        )}
+      </svg>
+
+      {/* Cycling text inside disc */}
+      {animatedText && (
+        <span className="relative z-10 flex items-center justify-center leading-none">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={CYCLE[i]}
+              initial={{ opacity: 0, y: 6, filter: "blur(3px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -6, filter: "blur(3px)" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="font-bold tracking-tight text-white"
+              style={{
+                fontSize: "0.55em",
+                textShadow: "0 1px 6px rgba(0,0,0,0.35)",
+              }}
+            >
+              {CYCLE[i]}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      )}
+    </span>
   );
 }
