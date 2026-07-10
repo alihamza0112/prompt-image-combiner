@@ -2,19 +2,40 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Toaster, toast } from "sonner";
-import { Mail, MessageCircle, Github, MapPin, User, Send, Sparkles } from "lucide-react";
+import {
+  Mail,
+  MessageCircle,
+  Github,
+  MapPin,
+  User,
+  Send,
+  Sparkles,
+  Briefcase,
+  LifeBuoy,
+  Lightbulb,
+  Bug,
+} from "lucide-react";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
+import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
+import {
+  CardGrid,
+  CtaSection,
+  FaqSection,
+  LongForm,
+  SectionHeading,
+  type Card,
+} from "@/components/PageSections";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
   head: () => ({
     meta: [
-      { title: "Contact — AIXO" },
+      { title: "Contact AIXO — AI Tools Support, Feature Requests & Bug Reports" },
       {
         name: "description",
         content:
-          "Get in touch with Ali Hamza, creator of AIXO — AI-powered micro SaaS tools for creators, students, freelancers, and professionals.",
+          "Contact AIXO for AI tools support, feature requests, bug reports, and business inquiries. Built by Ali Hamza — replies within 24 hours.",
       },
       { property: "og:title", content: "Contact — AIXO" },
       {
@@ -22,11 +43,11 @@ export const Route = createFileRoute("/contact")({
         content: "Reach out to the AIXO team via email, WhatsApp, or GitHub.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/contact" },
+      { property: "og:url", content: "https://prompt-sparkle-ai-37.lovable.app/contact" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Contact — AIXO" },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/contact" }],
   }),
 });
 
@@ -51,6 +72,56 @@ const INFO = [
     href: "https://github.com/alihamza0112",
   },
   { icon: MapPin, label: "Location", value: "Burewala, Pakistan" },
+];
+
+const WHY_CONTACT: Card[] = [
+  {
+    icon: Briefcase,
+    title: "Business",
+    text: "Partnerships, sponsorships, ad placements, or collaborations — let's talk about working together.",
+  },
+  {
+    icon: LifeBuoy,
+    title: "Support",
+    text: "Stuck with a tool or seeing unexpected behaviour? Send the details and we'll help you out.",
+  },
+  {
+    icon: Lightbulb,
+    title: "Feature Requests",
+    text: "Have an idea for a new AI tool or an improvement? Your suggestions shape the AIXO roadmap.",
+  },
+  {
+    icon: Bug,
+    title: "Bug Reports",
+    text: "Found something broken? Report it with a quick description and we'll ship a fix fast.",
+  },
+];
+
+const FAQS = [
+  {
+    q: "How quickly does AIXO reply?",
+    a: "Most emails and messages get a reply within 24 hours, usually much faster on weekdays.",
+  },
+  {
+    q: "Is AIXO free to use?",
+    a: "Yes. Every tool on AIXO — the Image Combiner and the AI Prompt Generator — is 100% free with no signup.",
+  },
+  {
+    q: "Can I request a new tool or feature?",
+    a: "Absolutely. Feature requests directly influence what we build next. Send an email or open an issue on GitHub.",
+  },
+  {
+    q: "How do I report a bug?",
+    a: "Use the contact form or email us with a short description, the tool you were using, and a screenshot if possible.",
+  },
+  {
+    q: "Do you offer partnerships or ad placements?",
+    a: "Yes. Reach out via email with a short overview of your brand and we'll get back to you with placement options.",
+  },
+  {
+    q: "Where is AIXO based?",
+    a: "AIXO is built and maintained from Burewala, Pakistan, and serves users worldwide.",
+  },
 ];
 
 function ContactPage() {
@@ -80,7 +151,7 @@ function ContactPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground antialiased">
+    <div className="relative min-h-screen bg-background pb-[60px] text-foreground antialiased md:pb-0">
       <Toaster position="top-center" richColors theme="dark" />
       <SiteHeader />
 
@@ -111,12 +182,17 @@ function ContactPage() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg"
           >
-            Have a question, an idea, or just want to say hi? I'd love to hear from you — replies usually go out within 24 hours.
+            Have a question, an idea, or just want to say hi? Replies usually go out within 24 hours.
           </motion.p>
         </div>
       </section>
 
-      {/* Cards */}
+      {/* Ad — below hero */}
+      <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <AdPlaceholder size="banner" slotId="contact-below-hero" label="Adstera Ad Placement — Below Hero" />
+      </div>
+
+      {/* Contact cards */}
       <section className="mx-auto max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {INFO.map((item, i) => {
@@ -158,7 +234,7 @@ function ContactPage() {
       </section>
 
       {/* Form */}
-      <section className="mx-auto max-w-3xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-3xl px-4 pb-12 pt-6 sm:px-6 lg:px-8">
         <motion.form
           onSubmit={onSubmit}
           initial={{ opacity: 0, y: 20 }}
@@ -211,7 +287,53 @@ function ContactPage() {
         </motion.form>
       </section>
 
+      {/* Why contact */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading
+          eyebrow="Why contact"
+          title="Why reach out to AIXO"
+          subtitle="Whether it's a partnership, a bug, or a big idea — we want to hear it."
+        />
+        <div className="mt-10">
+          <CardGrid cards={WHY_CONTACT} cols={4} />
+        </div>
+      </section>
+
+      {/* About */}
+      <section className="px-4 py-10 sm:px-6 lg:px-8">
+        <LongForm
+          eyebrow="About us"
+          title="About AIXO"
+          paragraphs={[
+            "<strong>AIXO</strong> is a lightweight, premium micro SaaS toolkit built for creators, students, marketers, freelancers, and everyday professionals who want fast, free, and private AI tools. We started with a simple belief: powerful utilities should be one click away — no signups, no subscriptions, no data harvesting.",
+            "Our current toolkit includes the <strong>AI Image Combiner</strong> — a browser-based tool that merges unlimited images into one clean grid — and the <strong>AI Prompt Generator</strong>, which turns rough ideas into structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages. Every tool ships with a modern dark UI, smooth animations, and a design that respects your time.",
+            "Our <strong>mission</strong> is to democratize AI-powered productivity. Premium software shouldn't be locked behind paywalls or complex onboarding. We build tools that just work — instantly, in your browser, on any device — so you can stop fighting with software and start getting things done.",
+            "<strong>Privacy is non-negotiable.</strong> Wherever possible, AIXO processes your data locally in the browser using the Canvas API and other client-side technologies. Your images, prompts, and files never touch our servers unless you explicitly send them. There are no tracking pixels, no third-party analytics on tool pages, and no accounts to breach.",
+            "Looking ahead, our <strong>roadmap</strong> includes new AI utilities — a background remover, a text-to-image mock-up tool, a smart PDF splitter, and more — plus deeper multilingual support and offline-capable versions of the existing tools. AIXO will always stay free, ad-supported, and privacy-first. If you have an idea for what we should build next, the contact form above is the best place to share it.",
+          ]}
+        />
+      </section>
+
+      {/* Ad — above FAQ */}
+      <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <AdPlaceholder size="banner" slotId="contact-pre-faq" label="Adstera Ad Placement — Above FAQ" />
+      </div>
+
+      <FaqSection faqs={FAQS} />
+
+      <CtaSection
+        title="Try the AIXO toolkit"
+        subtitle="Fast, free, and private AI tools you can use right now."
+        primary={{ label: "Open Image Combiner", to: "/image-combiner" }}
+        secondary={{ label: "Try Prompt Generator", to: "/prompt-generator" }}
+      />
+
+      <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <AdPlaceholder size="leaderboard" slotId="contact-above-footer" label="Adstera Ad Placement — Above Footer" />
+      </div>
+
       <SiteFooter />
+      <StickyMobileAd />
     </div>
   );
 }
