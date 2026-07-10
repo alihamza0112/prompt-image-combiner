@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { CopyButton } from "@/components/CopyButton";
 
 type UploadedImage = {
   id: string;
@@ -502,9 +503,19 @@ export default function ImageCombinerTool() {
                   <Button size="sm" variant="outline" onClick={() => exportAs("webp")}>
                     <Download className="mr-1 h-4 w-4" /> WEBP
                   </Button>
-                  <Button size="sm" variant="outline" onClick={copyImage}>
-                    <Copy className="mr-1 h-4 w-4" /> Copy
-                  </Button>
+                  <CopyButton
+                    size="sm"
+                    variant="outline"
+                    getText={() => ""}
+                    onCopy={async () => {
+                      if (!resultBlob) throw new Error("No image");
+                      await navigator.clipboard.write([
+                        new ClipboardItem({ [resultBlob.type]: resultBlob }),
+                      ]);
+                    }}
+                    toastMessage="Image copied successfully!"
+                  />
+
                   <Button size="sm" variant="ghost" onClick={clearAll}>
                     <RotateCcw className="mr-1 h-4 w-4" /> Start over
                   </Button>

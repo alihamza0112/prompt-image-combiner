@@ -14,6 +14,8 @@ import {
   Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
 } from "@/components/ui/command";
 import { generatePromptFn } from "@/lib/generate-prompt.functions";
+import { CopyButton } from "@/components/CopyButton";
+
 
 
 /**
@@ -689,14 +691,8 @@ export default function PromptGenerator() {
     }
   };
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(result);
-      toast.success("Copied to clipboard");
-    } catch {
-      toast.error("Copy failed. Please try again.");
-    }
-  };
+  // Copy is handled inline by <CopyButton /> below
+
 
   const handleClear = () => {
     setTitle("");
@@ -796,9 +792,12 @@ export default function PromptGenerator() {
                 {result}
               </pre>
               <div className="mt-5 flex flex-wrap gap-2">
-                <Button size="sm" onClick={handleCopy} className="bg-gradient-brand text-white hover:opacity-95 btn-premium">
-                  <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy
-                </Button>
+                <CopyButton
+                  getText={() => result}
+                  size="sm"
+                  idleClassName="bg-gradient-brand text-white hover:opacity-95 btn-premium"
+                />
+
                 <Button size="sm" variant="ghost" onClick={handleClear}>
                   <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear
                 </Button>
