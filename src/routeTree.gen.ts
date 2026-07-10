@@ -9,20 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VoiceToTextRouteImport } from './routes/voice-to-text'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PromptGeneratorRouteImport } from './routes/prompt-generator'
 import { Route as ImageCombinerRouteImport } from './routes/image-combiner'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
-const VoiceToTextRoute = VoiceToTextRouteImport.update({
-  id: '/voice-to-text',
-  path: '/voice-to-text',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromptGeneratorRoute = PromptGeneratorRouteImport.update({
+  id: '/prompt-generator',
+  path: '/prompt-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImageCombinerRoute = ImageCombinerRouteImport.update({
@@ -45,23 +45,23 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
+  '/prompt-generator': typeof PromptGeneratorRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
+  '/prompt-generator': typeof PromptGeneratorRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
+  '/prompt-generator': typeof PromptGeneratorRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/voice-to-text': typeof VoiceToTextRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -69,41 +69,46 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/image-combiner'
+    | '/prompt-generator'
     | '/sitemap.xml'
-    | '/voice-to-text'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/image-combiner' | '/sitemap.xml' | '/voice-to-text'
+  to:
+    | '/'
+    | '/contact'
+    | '/image-combiner'
+    | '/prompt-generator'
+    | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
     | '/contact'
     | '/image-combiner'
+    | '/prompt-generator'
     | '/sitemap.xml'
-    | '/voice-to-text'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   ImageCombinerRoute: typeof ImageCombinerRoute
+  PromptGeneratorRoute: typeof PromptGeneratorRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  VoiceToTextRoute: typeof VoiceToTextRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/voice-to-text': {
-      id: '/voice-to-text'
-      path: '/voice-to-text'
-      fullPath: '/voice-to-text'
-      preLoaderRoute: typeof VoiceToTextRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prompt-generator': {
+      id: '/prompt-generator'
+      path: '/prompt-generator'
+      fullPath: '/prompt-generator'
+      preLoaderRoute: typeof PromptGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/image-combiner': {
@@ -134,8 +139,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   ImageCombinerRoute: ImageCombinerRoute,
+  PromptGeneratorRoute: PromptGeneratorRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  VoiceToTextRoute: VoiceToTextRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
