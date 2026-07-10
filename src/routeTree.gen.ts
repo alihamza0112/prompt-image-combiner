@@ -9,20 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PromptGeneratorRouteImport } from './routes/prompt-generator'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PromptGeneratorRouteImport } from './routes/prompt-generator'
 import { Route as ImageCombinerRouteImport } from './routes/image-combiner'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
-const PromptGeneratorRoute = PromptGeneratorRouteImport.update({
-  id: '/prompt-generator',
-  path: '/prompt-generator',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromptGeneratorRoute = PromptGeneratorRouteImport.update({
+  id: '/prompt-generator',
+  path: '/prompt-generator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImageCombinerRoute = ImageCombinerRouteImport.update({
@@ -45,23 +45,23 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/prompt-generator': typeof PromptGeneratorRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/prompt-generator': typeof PromptGeneratorRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/image-combiner': typeof ImageCombinerRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/prompt-generator': typeof PromptGeneratorRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -69,41 +69,46 @@ export interface FileRouteTypes {
     | '/'
     | '/contact'
     | '/image-combiner'
-    | '/sitemap.xml'
     | '/prompt-generator'
+    | '/sitemap.xml'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/image-combiner' | '/sitemap.xml' | '/prompt-generator'
+  to:
+    | '/'
+    | '/contact'
+    | '/image-combiner'
+    | '/prompt-generator'
+    | '/sitemap.xml'
   id:
     | '__root__'
     | '/'
     | '/contact'
     | '/image-combiner'
-    | '/sitemap.xml'
     | '/prompt-generator'
+    | '/sitemap.xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   ImageCombinerRoute: typeof ImageCombinerRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   PromptGeneratorRoute: typeof PromptGeneratorRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/prompt-generator': {
-      id: '/prompt-generator'
-      path: '/prompt-generator'
-      fullPath: '/prompt-generator'
-      preLoaderRoute: typeof PromptGeneratorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prompt-generator': {
+      id: '/prompt-generator'
+      path: '/prompt-generator'
+      fullPath: '/prompt-generator'
+      preLoaderRoute: typeof PromptGeneratorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/image-combiner': {
@@ -134,8 +139,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   ImageCombinerRoute: ImageCombinerRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
   PromptGeneratorRoute: PromptGeneratorRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
