@@ -14,7 +14,8 @@ export const generatePromptFn = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data }) => {
     const key = process.env.LOVABLE_API_KEY;
-    if (!key) throw new Error("Missing LOVABLE_API_KEY");
+    console.log("[generatePromptFn] key present:", !!key, "len:", key?.length);
+    if (!key) throw new Error("Missing LOVABLE_API_KEY on server");
 
     const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
     const gateway = createLovableAiGatewayProvider(key);
