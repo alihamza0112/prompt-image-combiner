@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import {
   Accordion,
@@ -11,6 +11,114 @@ import {
 import { Button } from "@/components/ui/button";
 
 export type Card = { icon: LucideIcon; title: string; text: string };
+export type Step = { title: string; text: string };
+export type TimelineItem = { year: string; title: string; text: string };
+
+export function StepsSection({ steps }: { steps: Step[] }) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {steps.map((s, i) => (
+        <motion.div
+          key={s.title}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.4, delay: i * 0.06 }}
+          whileHover={{ y: -4 }}
+          className="relative rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.01] p-6 shadow-card backdrop-blur transition-shadow hover:shadow-glow"
+        >
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-brand text-sm font-bold text-white shadow-glow">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <h3 className="mt-4 text-base font-semibold">{s.title}</h3>
+          <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+export function ChecklistGrid({ items }: { items: string[] }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((item, i) => (
+        <motion.div
+          key={item}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.35, delay: i * 0.04 }}
+          whileHover={{ y: -3 }}
+          className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 backdrop-blur transition-colors hover:bg-white/[0.06]"
+        >
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-gradient-brand shadow-glow">
+            <Check className="h-3.5 w-3.5 text-white" />
+          </span>
+          <span className="text-sm font-medium text-foreground">{item}</span>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+export function TimelineSection({ items }: { items: TimelineItem[] }) {
+  return (
+    <div className="relative mx-auto max-w-3xl">
+      <div className="absolute left-4 top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-white/15 to-transparent" />
+      <div className="space-y-5">
+        {items.map((it, i) => (
+          <motion.div
+            key={it.year + it.title}
+            initial={{ opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+            className="relative pl-12"
+          >
+            <span className="absolute top-4 left-2 grid h-5 w-5 place-items-center rounded-full bg-gradient-brand shadow-glow">
+              <span className="h-2 w-2 rounded-full bg-white" />
+            </span>
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.01] p-5 shadow-card backdrop-blur">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-[color:var(--brand)]">
+                {it.year}
+              </div>
+              <h4 className="mt-1 text-base font-semibold">{it.title}</h4>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{it.text}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function CalloutBox({
+  icon: Icon,
+  title,
+  text,
+}: {
+  icon: LucideIcon;
+  title: string;
+  text: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className="mx-auto flex max-w-3xl items-start gap-4 rounded-2xl border border-white/10 bg-gradient-to-r from-white/[0.06] to-white/[0.02] p-5 shadow-card backdrop-blur"
+    >
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-brand shadow-glow">
+        <Icon className="h-5 w-5 text-white" />
+      </span>
+      <div>
+        <h4 className="text-sm font-semibold">{title}</h4>
+        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{text}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 export function SectionHeading({
   eyebrow,
