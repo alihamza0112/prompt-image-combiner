@@ -126,7 +126,26 @@ function AboutPage() {
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Mission & Vision" title="Why AIXO exists" />
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          <CardGrid cards={MISSION_VISION} />
+          {MISSION_VISION.map((c, i) => (
+            <motion.div
+              key={c.title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.45, delay: i * 0.06 }}
+              whileHover={{ y: -5 }}
+              className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.01] p-7 shadow-card backdrop-blur-xl transition-shadow hover:shadow-glow"
+            >
+              <div className="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full bg-gradient-brand opacity-15 blur-3xl transition-opacity duration-500 group-hover:opacity-30" />
+              <div className="relative">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-brand shadow-glow transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                  <c.icon className="h-5 w-5 text-white" />
+                </span>
+                <h3 className="mt-5 text-xl font-semibold tracking-tight">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.text}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
