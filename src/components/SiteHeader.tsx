@@ -6,14 +6,15 @@ import AixoLogo from "@/components/AixoLogo";
 
 export type NavItem = {
   label: string;
-  to: "/" | "/prompt-generator" | "/image-combiner" | "/contact";
+  to: "/" | "/prompt-generator" | "/image-combiner" | "/about" | "/contact";
   exact?: boolean;
 };
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Home", to: "/", exact: true },
-  { label: "AI Prompt Generator", to: "/prompt-generator" },
   { label: "Image Combiner", to: "/image-combiner" },
+  { label: "AI Prompt Generator", to: "/prompt-generator" },
+  { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -104,8 +105,9 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Home</Link>
-          <Link to="/prompt-generator" className="hover:text-foreground">Prompt Generator</Link>
           <Link to="/image-combiner" className="hover:text-foreground">Image Combiner</Link>
+          <Link to="/prompt-generator" className="hover:text-foreground">Prompt Generator</Link>
+          <Link to="/about" className="hover:text-foreground">About</Link>
           <Link to="/contact" className="hover:text-foreground">Contact</Link>
         </div>
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} AIXO</p>
