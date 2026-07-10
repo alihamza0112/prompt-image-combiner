@@ -366,7 +366,7 @@ export default function ImageCombinerTool() {
                       className="group relative overflow-hidden rounded-xl border border-white/10 bg-card shadow-card transition-shadow hover:shadow-glow"
                     >
                       <div className="aspect-square bg-muted">
-                        <img src={it.url} alt={it.name} className="h-full w-full object-cover" />
+                        <img src={it.url} alt={`Thumbnail of uploaded image: ${it.name}`} className="h-full w-full object-cover" />
                       </div>
                       <div className="absolute left-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-gradient-brand text-xs font-semibold text-white shadow">
                         {idx + 1}
@@ -522,7 +522,7 @@ export default function ImageCombinerTool() {
                 </div>
               </div>
               <div className="mt-5 overflow-hidden rounded-xl border border-white/10">
-                <img src={resultUrl} alt="Merged" className="block h-auto w-full" />
+                <img src={resultUrl} alt="Merged image grid preview" className="block h-auto w-full" />
               </div>
             </motion.div>
           )}

@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://prompt-sparkle-ai-37.lovable.app/sitemap.xml

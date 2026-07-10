@@ -30,7 +30,7 @@ export const Route = createFileRoute("/prompt-generator")({
   component: PromptGeneratorPage,
   head: () => ({
     meta: [
-      { title: "AI Prompt Generator — Free ChatGPT & Midjourney Prompt Builder | AIXO" },
+      { title: "AI Prompt Generator — Free ChatGPT Prompt Builder | AIXO" },
       { name: "description", content: "Free AI Prompt Generator by AIXO. Build structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages." },
       { property: "og:title", content: "AI Prompt Generator — AIXO" },
       { property: "og:description", content: "Structured, high-quality AI prompts in 20+ languages — free and instant." },

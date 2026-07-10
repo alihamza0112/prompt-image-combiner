@@ -30,7 +30,7 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
   head: () => ({
     meta: [
-      { title: "Contact AIXO — AI Tools Support, Feature Requests & Bug Reports" },
+      { title: "Contact AIXO — Support, Feedback & Feature Requests" },
       {
         name: "description",
         content:
