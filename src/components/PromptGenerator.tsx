@@ -2,13 +2,9 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
-  Sparkles, Copy, RefreshCw, Trash2, Wand2, Download, Check,
-  ChevronsUpDown, Search, Wand,
+  Sparkles, Copy, RefreshCw, Trash2, Wand2, Check, ChevronsUpDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import {
   Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
 } from "@/components/ui/command";
+
 
 /**
  * Multilingual AI Prompt Generator
@@ -601,34 +598,86 @@ function LanguageCombobox({
   );
 }
 
+// ---------- Automatic input-language detection ----------
+function detectInputLanguage(text: string): Language {
+  const t = text.trim();
+  if (!t) return LANGUAGES[0];
+
+  // Script-based detection
+  if (/[\u0600-\u06FF]/.test(t)) {
+    // Arabic script — distinguish Urdu via Urdu-specific letters
+    if (/[ںٹڈڑےھپچژگ]/.test(t)) return LANGUAGES.find((l) => l.code === "ur")!;
+    return LANGUAGES.find((l) => l.code === "ar")!;
+  }
+  if (/[\u0900-\u097F]/.test(t)) return LANGUAGES.find((l) => l.code === "hi")!;
+  if (/[\u0980-\u09FF]/.test(t)) return LANGUAGES.find((l) => l.code === "bn")!;
+  if (/[\u0A00-\u0A7F]/.test(t)) return LANGUAGES.find((l) => l.code === "pa")!;
+  if (/[\u3040-\u309F\u30A0-\u30FF]/.test(t)) return LANGUAGES.find((l) => l.code === "ja")!;
+  if (/[\uAC00-\uD7AF]/.test(t)) return LANGUAGES.find((l) => l.code === "ko")!;
+  if (/[\u4E00-\u9FFF]/.test(t)) return LANGUAGES.find((l) => l.code === "zh-CN")!;
+  if (/[\u0E00-\u0E7F]/.test(t)) return LANGUAGES.find((l) => l.code === "th")!;
+  if (/[\u0400-\u04FF]/.test(t)) return LANGUAGES.find((l) => l.code === "ru")!;
+
+  // Latin-script heuristics via common stopwords
+  const lc = ` ${t.toLowerCase()} `;
+  const stops: Array<[string, string[]]> = [
+    ["es", [" el ", " la ", " los ", " que ", " para ", " con ", " una ", " esto ", " cómo ", " qué "]],
+    ["fr", [" le ", " la ", " les ", " une ", " des ", " pour ", " avec ", " est ", " qui ", " ça "]],
+    ["de", [" der ", " die ", " das ", " und ", " nicht ", " ist ", " mit ", " für ", " ich ", " ein "]],
+    ["pt", [" que ", " para ", " com ", " uma ", " não ", " está ", " isto ", " você ", " ção "]],
+    ["it", [" il ", " lo ", " gli ", " una ", " che ", " per ", " con ", " sono ", " questo "]],
+    ["tr", [" ve ", " bir ", " için ", " bu ", " ile ", " çok ", " ben ", " sen ", " değil "]],
+    ["id", [" yang ", " untuk ", " dengan ", " tidak ", " saya ", " kamu ", " ini ", " itu "]],
+    ["vi", [" và ", " của ", " không ", " một ", " những ", " tôi ", " bạn ", " được "]],
+  ];
+  let best = { code: "en", score: 0 };
+  for (const [code, words] of stops) {
+    const score = words.reduce((n, w) => (lc.includes(w) ? n + 1 : n), 0);
+    if (score > best.score) best = { code, score };
+  }
+  // Diacritic-only fallbacks
+  if (best.score === 0) {
+    if (/[ñ¿¡áéíóú]/i.test(t)) best = { code: "es", score: 1 };
+    else if (/[àâçéèêëîïôùûœ]/i.test(t)) best = { code: "fr", score: 1 };
+    else if (/[äöüß]/i.test(t)) best = { code: "de", score: 1 };
+    else if (/[ãõç]/i.test(t)) best = { code: "pt", score: 1 };
+    else if (/[şğıİçö]/i.test(t)) best = { code: "tr", score: 1 };
+  }
+  return LANGUAGES.find((l) => l.code === best.code) ?? LANGUAGES[0];
+}
+
 // ---------- Main component ----------
 export default function PromptGenerator() {
   const [title, setTitle] = useState("");
   const [goal, setGoal] = useState("");
-  const [platform, setPlatform] = useState("ChatGPT");
-  const [style, setStyle] = useState("Professional");
-  const [quality, setQuality] = useState<Quality>("Advanced");
-  const [inputLang, setInputLang] = useState<Language>(LANGUAGES[0]);
   const [outputLang, setOutputLang] = useState<Language>(LANGUAGES[0]);
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
-  const [improving, setImproving] = useState(false);
+
+  const inputLang = useMemo(
+    () => detectInputLanguage(`${title} ${goal}`),
+    [title, goal],
+  );
 
   const args = useMemo<BuildArgs>(() => ({
-    title, goal, platform, style, quality, inputLang, outputLang,
-  }), [title, goal, platform, style, quality, inputLang, outputLang]);
+    title,
+    goal,
+    platform: "ChatGPT",
+    style: "Professional",
+    quality: "Advanced",
+    inputLang,
+    outputLang,
+  }), [title, goal, inputLang, outputLang]);
 
   const dir = RTL.has(outputLang.code) ? "rtl" : "ltr";
+  const inputDir = RTL.has(inputLang.code) ? "rtl" : "ltr";
+
+
+
 
   const handleGenerate = async () => {
-    if (!title.trim()) {
-      toast.error("Please add a prompt title.");
-      return;
-    }
-    if (!goal.trim()) {
-      toast.error("Describe your prompt goal.");
-      return;
-    }
+    if (!title.trim()) return toast.error("Please add a prompt title.");
+    if (!goal.trim()) return toast.error("Describe your prompt goal.");
     setLoading(true);
     setResult("");
     try {
@@ -641,18 +690,6 @@ export default function PromptGenerator() {
     }
   };
 
-  const handleImprove = async () => {
-    if (!result) return;
-    setImproving(true);
-    try {
-      const improved = await improvePromptLocal(result, args);
-      setResult(improved);
-      toast.success("Prompt improved");
-    } finally {
-      setImproving(false);
-    }
-  };
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(result);
@@ -660,19 +697,6 @@ export default function PromptGenerator() {
     } catch {
       toast.error("Copy failed. Please try again.");
     }
-  };
-
-  const handleDownload = () => {
-    const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    const safe = (title || "prompt").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    a.href = url;
-    a.download = `${safe || "prompt"}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   const handleClear = () => {
@@ -687,26 +711,10 @@ export default function PromptGenerator() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="mx-auto mt-8 max-w-3xl rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
+      className="mx-auto mt-8 max-w-2xl rounded-2xl border border-border bg-card/70 p-6 shadow-card backdrop-blur sm:p-8"
     >
-      {/* Languages */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <LanguageCombobox
-          id="input-lang"
-          value={inputLang}
-          onChange={setInputLang}
-          label="Your language"
-        />
-        <LanguageCombobox
-          id="output-lang"
-          value={outputLang}
-          onChange={setOutputLang}
-          label="Generate prompt in"
-        />
-      </div>
-
       {/* Title */}
-      <div className="mt-5">
+      <div>
         <Label htmlFor="prompt-title" className="mb-2 block text-sm font-medium">
           Prompt title <span className="text-[color:var(--brand)]">*</span>
         </Label>
@@ -714,20 +722,9 @@ export default function PromptGenerator() {
           id="prompt-title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="e.g. YouTube Documentary, SEO Blog, Facebook Ad"
+          placeholder="e.g. YouTube documentary about deep-sea life"
+          dir={inputDir}
         />
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {TITLE_SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => setTitle(s)}
-              className="rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Goal */}
@@ -739,62 +736,29 @@ export default function PromptGenerator() {
           id="prompt-goal"
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
-          placeholder="Describe exactly what you want the AI to produce. Include audience, tone, length, and any must-have details."
-          className="min-h-32 resize-none text-base"
-          dir={RTL.has(inputLang.code) ? "rtl" : "ltr"}
+          placeholder="Describe exactly what you want the AI to produce."
+          className="min-h-28 resize-none text-base"
+          dir={inputDir}
         />
       </div>
 
-      {/* Platform + Style */}
-      <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <div>
-          <Label className="mb-2 block text-sm font-medium">AI platform</Label>
-          <Select value={platform} onValueChange={setPlatform}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              {PLATFORMS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label className="mb-2 block text-sm font-medium">Prompt style</Label>
-          <Select value={style} onValueChange={setStyle}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <SelectContent>
-              {STYLES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Quality */}
+      {/* Output language */}
       <div className="mt-5">
-        <Label className="mb-2 block text-sm font-medium">Prompt quality</Label>
-        <div className="flex flex-wrap gap-2">
-          {QUALITIES.map((q) => (
-            <button
-              key={q}
-              type="button"
-              onClick={() => setQuality(q)}
-              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
-                quality === q
-                  ? "border-transparent bg-gradient-brand text-white shadow-glow"
-                  : "border-border hover:bg-accent"
-              }`}
-            >
-              {q}
-            </button>
-          ))}
-        </div>
+        <LanguageCombobox
+          id="output-lang"
+          value={outputLang}
+          onChange={setOutputLang}
+          label="Generate prompt in"
+        />
       </div>
 
       {/* Actions */}
-      <div className="mt-7 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2">
         <Button
           onClick={handleGenerate}
           disabled={loading}
           size="lg"
-          className="bg-gradient-brand text-white shadow-glow hover:opacity-95"
+          className="bg-gradient-brand text-white shadow-glow hover:opacity-95 btn-premium"
         >
           {loading ? (
             <><RefreshCw className="mr-2 h-4 w-4 animate-spin" /> Generating…</>
@@ -802,20 +766,7 @@ export default function PromptGenerator() {
             <><Wand2 className="mr-2 h-4 w-4" /> Generate Prompt</>
           )}
         </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          onClick={handleGenerate}
-          disabled={loading || !result}
-        >
-          <RefreshCw className="mr-2 h-4 w-4" /> Regenerate
-        </Button>
-        <Button
-          variant="ghost"
-          size="lg"
-          onClick={handleClear}
-          disabled={loading && !result}
-        >
+        <Button variant="ghost" size="lg" onClick={handleClear} disabled={loading}>
           <Trash2 className="mr-2 h-4 w-4" /> Clear
         </Button>
       </div>
@@ -824,19 +775,19 @@ export default function PromptGenerator() {
       <AnimatePresence>
         {result && (
           <motion.div
-            initial={{ opacity: 0, y: 16, height: 0 }}
+            initial={{ opacity: 0, y: 12, height: 0 }}
             animate={{ opacity: 1, y: 0, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
             className="mt-6 overflow-hidden"
           >
             <div className="rounded-xl border border-border bg-gradient-soft p-5">
-              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="mb-3 flex items-center justify-between gap-2">
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <Sparkles className="h-3 w-3 text-[color:var(--brand)]" /> Your prompt
                 </span>
                 <span className="rounded-full bg-background/70 px-2 py-0.5 text-xs text-muted-foreground">
-                  {platform} · {style} · {quality} · {outputLang.name}
+                  {outputLang.name}
                 </span>
               </div>
               <pre
@@ -846,21 +797,8 @@ export default function PromptGenerator() {
                 {result}
               </pre>
               <div className="mt-5 flex flex-wrap gap-2">
-                <Button size="sm" onClick={handleCopy} className="bg-gradient-brand text-white hover:opacity-95">
+                <Button size="sm" onClick={handleCopy} className="bg-gradient-brand text-white hover:opacity-95 btn-premium">
                   <Copy className="mr-1.5 h-3.5 w-3.5" /> Copy
-                </Button>
-                <Button size="sm" variant="outline" onClick={handleImprove} disabled={improving}>
-                  {improving ? (
-                    <><RefreshCw className="mr-1.5 h-3.5 w-3.5 animate-spin" /> Improving…</>
-                  ) : (
-                    <><Wand className="mr-1.5 h-3.5 w-3.5" /> Improve Prompt</>
-                  )}
-                </Button>
-                <Button size="sm" variant="outline" onClick={handleGenerate}>
-                  <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Regenerate
-                </Button>
-                <Button size="sm" variant="outline" onClick={handleDownload}>
-                  <Download className="mr-1.5 h-3.5 w-3.5" /> Download TXT
                 </Button>
                 <Button size="sm" variant="ghost" onClick={handleClear}>
                   <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Clear
@@ -870,12 +808,7 @@ export default function PromptGenerator() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Tiny helper hint */}
-      <p className="mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Search className="h-3 w-3" />
-        Write your goal in any language — the final prompt will be produced in your selected output language.
-      </p>
     </motion.div>
   );
 }
+
