@@ -5,7 +5,7 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "AIXO — Free AI Tools & Micro SaaS Toolkit (Image Combiner + Prompt Generator)" },
+      { title: "AIXO — Free AI Tools for Creators & Marketers" },
       {
         name: "description",
         content:

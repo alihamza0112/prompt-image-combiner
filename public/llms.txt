@@ -1,0 +1,13 @@
+# AIXO
+
+> Free, private, browser-based AI toolkit. Merge images and generate expert-level AI prompts — no signup, no tracking.
+
+AIXO is a micro SaaS collection of small, fast AI utilities that run in the browser. Everything is free and processes data locally where possible.
+
+## Pages
+
+- [Home](/): Overview of the AIXO toolkit and featured tools.
+- [AI Prompt Generator](/prompt-generator): Build structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages.
+- [AI Image Combiner](/image-combiner): Merge unlimited PNG, JPG, or WEBP images into one clean grid — entirely in the browser.
+- [About](/about): Mission, values, privacy commitment, and roadmap.
+- [Contact](/contact): Support, feedback, feature requests, and bug reports.

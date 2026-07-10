@@ -30,7 +30,7 @@ export const Route = createFileRoute("/prompt-generator")({
   component: PromptGeneratorPage,
   head: () => ({
     meta: [
-      { title: "AI Prompt Generator — Free ChatGPT & Midjourney Prompt Builder | AIXO" },
+      { title: "AI Prompt Generator — Free ChatGPT Prompt Builder | AIXO" },
       { name: "description", content: "Free AI Prompt Generator by AIXO. Build structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages." },
       { property: "og:title", content: "AI Prompt Generator — AIXO" },
       { property: "og:description", content: "Structured, high-quality AI prompts in 20+ languages — free and instant." },
@@ -41,6 +41,20 @@ export const Route = createFileRoute("/prompt-generator")({
       { name: "twitter:description", content: "Structured, high-quality AI prompts in 20+ languages." },
     ],
     links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/prompt-generator" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
   }),
 });
 
