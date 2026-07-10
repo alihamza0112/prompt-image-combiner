@@ -171,10 +171,82 @@
 .animate-logo-glow { animation: logo-glow 3.2s ease-in-out infinite; }
 .animate-drag-pulse { animation: drag-pulse 1.6s ease-out infinite; }
 
-/* Premium dark ambient background */
+/* Premium dark ambient background — very subtle slow-moving aurora */
+@keyframes aurora-drift {
+  0%, 100% { background-position: 0% 0%, 100% 0%; }
+  50% { background-position: 20% 10%, 80% 20%; }
+}
 .dark body {
   background-image:
-    radial-gradient(1200px 600px at 15% -10%, oklch(0.7 0.2 265 / 0.10), transparent 60%),
-    radial-gradient(900px 500px at 100% 10%, oklch(0.72 0.2 305 / 0.10), transparent 60%);
+    radial-gradient(1200px 600px at 15% -10%, oklch(0.7 0.2 265 / 0.12), transparent 60%),
+    radial-gradient(900px 500px at 100% 10%, oklch(0.72 0.2 305 / 0.12), transparent 60%);
   background-attachment: fixed;
+  background-size: 200% 200%, 200% 200%;
+  animation: aurora-drift 30s ease-in-out infinite;
 }
+
+/* ---------- Page transition (fast crossfade) ---------- */
+.page-transition {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  will-change: opacity, transform;
+}
+.page-transition[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Button premium interaction ---------- */
+@utility btn-premium {
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+.btn-premium:hover { transform: scale(1.03); }
+.btn-premium:active { transform: scale(0.97); }
+
+/* ---------- Input focus glow ---------- */
+.input-glow:focus,
+.input-glow:focus-visible {
+  border-color: oklch(0.7 0.2 265 / 0.55) !important;
+  box-shadow: 0 0 0 3px oklch(0.7 0.2 265 / 0.18), 0 0 24px -6px oklch(0.72 0.2 305 / 0.35);
+}
+
+/* ---------- Reveal on scroll (CSS-only, cheap) ---------- */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal-up {
+  animation: reveal-up 500ms ease-out both;
+  animation-timeline: view();
+  animation-range: entry 0% cover 35%;
+}
+
+/* ---------- Icon hover ---------- */
+.icon-hover {
+  transition: transform 250ms ease, filter 250ms ease;
+}
+.group:hover .icon-hover,
+.icon-hover:hover {
+  transform: rotate(6deg) scale(1.08);
+  filter: drop-shadow(0 0 8px oklch(0.72 0.2 305 / 0.55));
+}
+
+/* ---------- Success pop (upload complete) ---------- */
+@keyframes success-pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-success-pop { animation: success-pop 380ms ease-out; }
+
+/* ---------- Respect reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .page-transition { transform: none; }
+}
+
