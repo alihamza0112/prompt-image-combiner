@@ -30,11 +30,13 @@ export default function SiteHeader() {
       className="sticky top-0 z-40 border-b border-white/5 bg-background/60 backdrop-blur-xl backdrop-saturate-150"
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand animate-logo-float animate-logo-glow transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105">
-            <AixoLogo className="h-5 w-5" />
+        <Link to="/" className="flex items-center gap-2.5 group" aria-label="AIXO home">
+          <span className="relative block h-10 w-10 animate-logo-float transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-[3deg] rounded-full group-hover:shadow-glow">
+            <AixoLogo className="h-10 w-10" />
           </span>
-          <span className="text-base font-semibold tracking-tight">AIXO</span>
+          <span className="animate-fade-in text-lg font-extrabold tracking-tight text-gradient-brand drop-shadow-[0_0_12px_rgba(139,92,246,0.35)] transition-all duration-300 group-hover:drop-shadow-[0_0_18px_rgba(139,92,246,0.6)]">
+            AIXO
+          </span>
         </Link>
 
 
@@ -98,10 +100,8 @@ export function SiteFooter() {
     <footer className="mt-16 border-t border-white/5 py-10">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-gradient-brand">
-            <AixoLogo className="h-4 w-4" />
-          </span>
-          <span className="text-sm font-semibold">AIXO</span>
+          <AixoLogo className="h-8 w-8" orbit={false} />
+          <span className="text-sm font-bold tracking-tight text-gradient-brand">AIXO</span>
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Home</Link>
