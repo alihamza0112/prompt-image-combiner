@@ -299,20 +299,6 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* About */}
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <LongForm
-          eyebrow="About us"
-          title="About AIXO"
-          paragraphs={[
-            "<strong>AIXO</strong> is a lightweight, premium micro SaaS toolkit built for creators, students, marketers, freelancers, and everyday professionals who want fast, free, and private AI tools. We started with a simple belief: powerful utilities should be one click away — no signups, no subscriptions, no data harvesting.",
-            "Our current toolkit includes the <strong>AI Image Combiner</strong> — a browser-based tool that merges unlimited images into one clean grid — and the <strong>AI Prompt Generator</strong>, which turns rough ideas into structured, expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney in 20+ languages. Every tool ships with a modern dark UI, smooth animations, and a design that respects your time.",
-            "Our <strong>mission</strong> is to democratize AI-powered productivity. Premium software shouldn't be locked behind paywalls or complex onboarding. We build tools that just work — instantly, in your browser, on any device — so you can stop fighting with software and start getting things done.",
-            "<strong>Privacy is non-negotiable.</strong> Wherever possible, AIXO processes your data locally in the browser using the Canvas API and other client-side technologies. Your images, prompts, and files never touch our servers unless you explicitly send them. There are no tracking pixels, no third-party analytics on tool pages, and no accounts to breach.",
-            "Looking ahead, our <strong>roadmap</strong> includes new AI utilities — a background remover, a text-to-image mock-up tool, a smart PDF splitter, and more — plus deeper multilingual support and offline-capable versions of the existing tools. AIXO will always stay free, ad-supported, and privacy-first. If you have an idea for what we should build next, the contact form above is the best place to share it.",
-          ]}
-        />
-      </section>
 
       {/* Ad — above FAQ */}
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
