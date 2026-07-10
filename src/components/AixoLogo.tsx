@@ -1,6 +1,6 @@
 type Props = { className?: string };
 
-// Minimal "A" mark with an AI-inspired geometric node/orbit accent.
+// Premium "A" mark with blue→purple gradient, node accent, and orbit ring.
 export default function AixoLogo({ className }: Props) {
   return (
     <svg
@@ -10,19 +10,34 @@ export default function AixoLogo({ className }: Props) {
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="aixo-mark" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="1" stopColor="#ffffff" stopOpacity="0.85" />
+        <linearGradient id="aixo-a" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="1" />
+          <stop offset="1" stopColor="#e9ecff" stopOpacity="0.92" />
         </linearGradient>
+        <linearGradient id="aixo-node" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#93c5fd" />
+          <stop offset="1" stopColor="#c4b5fd" />
+        </linearGradient>
+        <filter id="aixo-glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="0.8" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
+
       {/* Letter A */}
-      <path
-        d="M6 25 L15 6 L17 6 L26 25 L22.4 25 L20.4 20.5 L11.6 20.5 L9.6 25 Z M13.1 17.2 L18.9 17.2 L16 10.6 Z"
-        fill="url(#aixo-mark)"
-      />
-      {/* AI node accent */}
-      <circle cx="24" cy="8" r="2.2" fill="#ffffff" />
-      <circle cx="24" cy="8" r="3.6" fill="none" stroke="#ffffff" strokeOpacity="0.55" strokeWidth="0.8" />
+      <g filter="url(#aixo-glow)">
+        <path
+          d="M6 25.5 L15 5.5 L17 5.5 L26 25.5 L22.4 25.5 L20.6 21 L11.4 21 L9.6 25.5 Z M12.9 17.8 L19.1 17.8 L16 10.4 Z"
+          fill="url(#aixo-a)"
+        />
+      </g>
+
+      {/* Orbit ring + node */}
+      <circle cx="24.5" cy="7.5" r="4.2" fill="none" stroke="url(#aixo-node)" strokeOpacity="0.7" strokeWidth="0.9" />
+      <circle cx="24.5" cy="7.5" r="2.1" fill="url(#aixo-node)" />
     </svg>
   );
 }

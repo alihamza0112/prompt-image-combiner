@@ -6,16 +6,14 @@ import AixoLogo from "@/components/AixoLogo";
 
 export type NavItem = {
   label: string;
-  to: "/" | "/image-combiner" | "/voice-to-text" | "/contact";
-  hash?: string;
+  to: "/" | "/prompt-generator" | "/image-combiner" | "/contact";
   exact?: boolean;
 };
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "Home", to: "/", exact: true },
-  { label: "AI Prompt Generator", to: "/", hash: "generator" },
+  { label: "AI Prompt Generator", to: "/prompt-generator" },
   { label: "Image Combiner", to: "/image-combiner" },
-  { label: "AI Voice to Text", to: "/voice-to-text" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -32,7 +30,7 @@ export default function SiteHeader() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand animate-logo-float animate-logo-glow transition-transform duration-500 group-hover:rotate-6">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand animate-logo-float animate-logo-glow transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105">
             <AixoLogo className="h-5 w-5" />
           </span>
           <span className="text-base font-semibold tracking-tight">AIXO</span>
@@ -44,7 +42,6 @@ export default function SiteHeader() {
             <Link
               key={item.label}
               to={item.to}
-              hash={item.hash}
               activeOptions={{ exact: !!item.exact }}
               className="relative rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground [&.active]:text-foreground"
               activeProps={{ className: "active" }}
@@ -79,7 +76,6 @@ export default function SiteHeader() {
                 <Link
                   key={item.label}
                   to={item.to}
-                  hash={item.hash}
                   activeOptions={{ exact: !!item.exact }}
                   onClick={() => setOpen(false)}
                   className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground [&.active]:bg-white/10 [&.active]:text-foreground"
@@ -108,10 +104,9 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Home</Link>
+          <Link to="/prompt-generator" className="hover:text-foreground">Prompt Generator</Link>
           <Link to="/image-combiner" className="hover:text-foreground">Image Combiner</Link>
-          <Link to="/voice-to-text" className="hover:text-foreground">Voice to Text</Link>
           <Link to="/contact" className="hover:text-foreground">Contact</Link>
-
         </div>
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} AIXO</p>
       </div>
