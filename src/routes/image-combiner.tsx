@@ -1,13 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Toaster } from "sonner";
-import { Layers } from "lucide-react";
 import {
-  Accordion, AccordionContent, AccordionItem, AccordionTrigger,
-} from "@/components/ui/accordion";
+  Layers,
+  Infinity as InfinityIcon,
+  Download,
+  MousePointerClick,
+  Lock,
+} from "lucide-react";
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
 import ImageCombinerTool from "@/components/ImageCombinerTool";
+import {
+  CardGrid,
+  CtaSection,
+  FaqSection,
+  LongForm,
+  SectionHeading,
+  type Card,
+} from "@/components/PageSections";
 
 export const Route = createFileRoute("/image-combiner")({
   component: ImageCombinerPage,
@@ -17,14 +28,15 @@ export const Route = createFileRoute("/image-combiner")({
       {
         name: "description",
         content:
-          "Free browser-based AI Image Combiner. Merge unlimited PNG, JPG, or WEBP images into one organized image for ChatGPT, research, and social media. 100% private.",
+          "Free online AI Image Combiner. Merge unlimited PNG, JPG, or WEBP images into one organized image grid — private, browser-based, no signup, no watermark.",
       },
       { property: "og:title", content: "AI Image Combiner — Merge Unlimited Images into One" },
       {
         property: "og:description",
-        content: "Combine dozens of images into one smart image, right in your browser.",
+        content: "Combine dozens of images into one clean grid — private, fast, browser-only.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://prompt-sparkle-ai-37.lovable.app/image-combiner" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "AI Image Combiner — AIXO" },
       {
@@ -32,19 +44,81 @@ export const Route = createFileRoute("/image-combiner")({
         content: "Merge unlimited images into one — private, fast, browser-only.",
       },
     ],
-    links: [{ rel: "canonical", href: "/image-combiner" }],
+    links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/image-combiner" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "AIXO Image Combiner",
+          applicationCategory: "MultimediaApplication",
+          operatingSystem: "Web",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          description:
+            "Free browser-based tool that merges unlimited images into one clean grid.",
+        }),
+      },
+    ],
   }),
 });
 
+const FEATURES: Card[] = [
+  {
+    icon: InfinityIcon,
+    title: "Unlimited Uploads",
+    text: "Merge as many images as your device can hold — no per-session caps, no hidden limits.",
+  },
+  {
+    icon: Download,
+    title: "High Quality Export",
+    text: "Choose PNG, JPG, or WEBP at standard, high, or ultra resolution for pixel-sharp output.",
+  },
+  {
+    icon: MousePointerClick,
+    title: "Drag & Drop",
+    text: "Add files with a drop, reorder with a drag, and preview every change instantly.",
+  },
+  {
+    icon: Lock,
+    title: "Processed Locally",
+    text: "Everything runs in your browser via the Canvas API — zero uploads, complete privacy.",
+  },
+];
+
 const FAQS = [
-  { q: "Is the AI Image Combiner really free?", a: "Yes. It's 100% free with no account, no watermark, and no upload limits." },
-  { q: "Are my images uploaded to a server?", a: "Never. All merging happens locally in your browser using the Canvas API. Your files never leave your device." },
-  { q: "How many images can I combine?", a: "There's no hard limit — you can combine dozens or even hundreds, depending on your device's memory." },
-  { q: "Which formats are supported?", a: "You can upload PNG, JPG, JPEG, and WEBP images and export as PNG, JPG, or WEBP." },
-  { q: "Can I control the grid layout?", a: "Yes. Choose Auto or fix 2, 3, 4, or 5 columns, adjust spacing, borders, and rounded corners." },
-  { q: "Does it work on mobile?", a: "Absolutely. The tool is fully responsive and works on modern mobile browsers." },
-  { q: "Can I add numbers to each image?", a: "Yes. Toggle number labels on to overlay a numbered badge on each image in the merged output." },
-  { q: "What's the maximum output quality?", a: "Ultra quality preserves near-original resolution. Use High or Standard for smaller file sizes." },
+  {
+    q: "How do I combine multiple images into one online?",
+    a: "Upload your images to the AIXO Image Combiner, drag them into the order you like, pick your layout and export format, then click Download. The merged image is generated instantly in your browser.",
+  },
+  {
+    q: "Is the Image Combiner really free?",
+    a: "Yes. AIXO is 100% free with no account, no watermark, and no daily limits.",
+  },
+  {
+    q: "Are my images uploaded to a server?",
+    a: "No. All merging happens locally in your browser using the Canvas API. Your files never leave your device.",
+  },
+  {
+    q: "How many images can I merge?",
+    a: "There's no hard limit. You can combine dozens or hundreds depending on your device's memory.",
+  },
+  {
+    q: "Which formats can I upload and export?",
+    a: "Upload PNG, JPG, JPEG, and WEBP. Export as PNG, JPG, or WEBP.",
+  },
+  {
+    q: "Can I control the grid layout and spacing?",
+    a: "Yes. Choose auto or fixed 2–5 column grids, tweak spacing, add borders, and set rounded corners.",
+  },
+  {
+    q: "Does it work on mobile phones and tablets?",
+    a: "Fully. The interface is responsive and supports touch drag-and-drop on modern mobile browsers.",
+  },
+  {
+    q: "Can I add numbers or labels to each image?",
+    a: "Yes. Toggle number labels to overlay a numbered badge on each image in the merged output.",
+  },
 ];
 
 function ImageCombinerPage() {
@@ -53,7 +127,7 @@ function ImageCombinerPage() {
       <Toaster richColors position="top-center" theme="dark" />
       <SiteHeader />
 
-      {/* Compact hero */}
+      {/* Hero */}
       <section className="relative overflow-hidden pt-12 pb-6 sm:pt-16">
         <div className="pointer-events-none absolute left-[-10%] top-[-10%] h-[380px] w-[380px] rounded-full bg-[oklch(0.7_0.2_265)] opacity-25 blur-3xl animate-float-slow" />
         <div className="pointer-events-none absolute right-[-10%] top-20 h-[420px] w-[420px] rounded-full bg-[oklch(0.72_0.2_305)] opacity-25 blur-3xl animate-float-slower" />
@@ -75,9 +149,46 @@ function ImageCombinerPage() {
         </motion.div>
       </section>
 
+      {/* Ad — below hero */}
+      <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+        <AdPlaceholder size="banner" slotId="ic-below-hero" label="Adstera Ad Placement — Below Hero" />
+      </div>
+
       {/* Tool */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10">
         <ImageCombinerTool />
+      </section>
+
+      {/* Ad — between tool and features */}
+      <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+        <AdPlaceholder size="banner" slotId="ic-post-tool" label="Adstera Ad Placement — Between Tool and Features" />
+      </div>
+
+      {/* Features */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading
+          eyebrow="Features"
+          title="Built for speed, quality, and privacy"
+          subtitle="Everything you need to merge images cleanly — and nothing you don't."
+        />
+        <div className="mt-10">
+          <CardGrid cards={FEATURES} cols={4} />
+        </div>
+      </section>
+
+      {/* How to use */}
+      <section className="px-4 py-10 sm:px-6 lg:px-8">
+        <LongForm
+          eyebrow="How to use"
+          title="How to combine images with AIXO"
+          paragraphs={[
+            "The <strong>AIXO Image Combiner</strong> is designed to be effortless. Start by dragging your images into the upload area or clicking to browse. Supported formats include <strong>PNG, JPG, JPEG, and WEBP</strong>, and you can add as many files as your device can handle — there's no cap and no queue.",
+            "Once your images appear as thumbnails, arrange them in the order you want. Grab any tile and drop it into a new position; the preview updates live so you always see the final layout. If you'd like numbered labels — great for tutorials, product catalogs, or bug reports — toggle them on and each image gets a clean badge in the corner.",
+            "Choose a <strong>grid layout</strong> that fits your content. Auto mode balances rows automatically, or you can lock the grid to 2, 3, 4, or 5 columns. Adjust the spacing between images, add rounded corners, and set a border color if you want a framed look. Every option is optional — the defaults produce a polished result in one click.",
+            "When you're ready, pick your <strong>export format</strong> — PNG for lossless quality, JPG for smaller files, or WEBP for the best balance of size and clarity. Select a quality tier (Standard, High, or Ultra) depending on where the image will end up, then hit <strong>Download</strong>. The file saves directly to your device in seconds.",
+            "The whole process runs <strong>entirely in your browser</strong>. Your images never touch a server, no account is required, and there are no watermarks on the output. AIXO is genuinely free — the perfect companion for creators, students, marketers, and anyone who works with lots of visuals.",
+          ]}
+        />
       </section>
 
       {/* Ad — above FAQ */}
@@ -85,21 +196,14 @@ function ImageCombinerPage() {
         <AdPlaceholder size="banner" slotId="ic-pre-faq" label="Adstera Ad Placement — Above FAQ" />
       </div>
 
-      {/* FAQ */}
-      <section id="faq" className="mx-auto max-w-3xl px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">Frequently asked questions</h2>
-          <p className="mt-3 text-muted-foreground">Everything you need to know about the AI Image Combiner.</p>
-        </div>
-        <Accordion type="single" collapsible className="mt-8">
-          {FAQS.map((f, i) => (
-            <AccordionItem key={i} value={`f-${i}`} className="border-white/10">
-              <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </section>
+      <FaqSection faqs={FAQS} />
+
+      <CtaSection
+        title="Merge your first image grid now"
+        subtitle="Free, private, and instant. No signup, no watermark, no waiting."
+        primary={{ label: "Start Combining", to: "/image-combiner" }}
+        secondary={{ label: "Try Prompt Generator", to: "/prompt-generator" }}
+      />
 
       {/* Above-footer ad */}
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
