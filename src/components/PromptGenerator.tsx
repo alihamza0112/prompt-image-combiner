@@ -14,6 +14,8 @@ import {
   Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
 } from "@/components/ui/command";
 import { generatePromptFn } from "@/lib/generate-prompt.functions";
+import { CopyButton } from "@/components/CopyButton";
+
 
 
 /**
