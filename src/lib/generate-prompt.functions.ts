@@ -11,7 +11,7 @@ const InputSchema = z.object({
 });
 
 export const generatePromptFn = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => InputSchema.parse(data))
+  .validator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data }) => {
     const key = process.env.LOVABLE_API_KEY;
     console.log("[generatePromptFn] key present:", !!key, "len:", key?.length);
