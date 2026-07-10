@@ -5,29 +5,29 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "AIXO — Free Micro SaaS AI Toolkit" },
+      { title: "AIXO — Free AI Tools & Micro SaaS Toolkit (Image Combiner + Prompt Generator)" },
       {
         name: "description",
         content:
-          "A lightweight micro SaaS toolkit: AI Prompt Generator, Image Combiner, and AI Voice to Text. Fast, private, and free — no account required.",
+          "Free AI tools by AIXO: merge images online with the AI Image Combiner and craft expert ChatGPT prompts with the AI Prompt Generator. Private, fast, no signup.",
       },
-      { property: "og:title", content: "AIXO — Free Micro SaaS AI Toolkit" },
+      { property: "og:title", content: "AIXO — Free AI Tools & Micro SaaS Toolkit" },
       {
         property: "og:description",
         content:
-          "AI Prompt Generator, Image Combiner, and AI Voice to Text — a fast, private toolkit for creators.",
+          "Merge images and generate structured AI prompts — a private, browser-based toolkit for creators.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://prompt-sparkle-ai-37.lovable.app/" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "AIXO — Free Micro SaaS AI Toolkit" },
+      { name: "twitter:title", content: "AIXO — Free AI Tools & Micro SaaS Toolkit" },
       {
         name: "twitter:description",
         content:
-          "Free micro SaaS AI toolkit: prompt generator, image combiner, and voice-to-text.",
+          "Free micro SaaS AI toolkit: image combiner and prompt generator.",
       },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/")({
           operatingSystem: "Web",
           offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
           description:
-            "Micro SaaS toolkit with AI Prompt Generator, Image Combiner, and AI Voice to Text.",
+            "Micro SaaS toolkit with AI Image Combiner and AI Prompt Generator.",
         }),
       },
     ],
