@@ -672,8 +672,8 @@ export default function PromptGenerator() {
   const dir = RTL.has(outputLang.code) ? "rtl" : "ltr";
   const inputDir = RTL.has(inputLang.code) ? "rtl" : "ltr";
 
-  // Silence unused warnings on scaffolding kept for future use
-  useEffect(() => { void inputLang; }, [inputLang]);
+
+
 
   const handleGenerate = async () => {
     if (!title.trim()) return toast.error("Please add a prompt title.");
