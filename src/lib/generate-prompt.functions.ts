@@ -60,7 +60,6 @@ export const generatePromptFn = createServerFn({ method: "POST" })
         model: gateway("openai/gpt-5.5"),
         system,
         prompt: user,
-        temperature: 0.7,
       });
       return { text: text.trim() };
     } catch (err) {
