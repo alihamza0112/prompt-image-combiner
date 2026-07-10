@@ -8,8 +8,6 @@ import {
   MousePointerClick,
   Lock,
   Upload,
-  Sliders,
-  Save,
   Presentation,
   BookOpen,
   ShoppingBag,
