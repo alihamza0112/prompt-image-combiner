@@ -43,6 +43,20 @@ export const Route = createFileRoute("/image-combiner")({
       { name: "twitter:description", content: "Merge unlimited images into one — private, fast, browser-only." },
     ],
     links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/image-combiner" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
   }),
 });
 

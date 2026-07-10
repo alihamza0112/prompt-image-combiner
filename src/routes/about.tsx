@@ -38,6 +38,20 @@ export const Route = createFileRoute("/about")({
       { name: "twitter:title", content: "About — AIXO" },
     ],
     links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/about" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
   }),
 });
 

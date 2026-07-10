@@ -47,6 +47,38 @@ export const Route = createFileRoute("/contact")({
       { name: "twitter:title", content: "Contact — AIXO" },
     ],
     links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/contact" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "AIXO",
+          image: "https://prompt-sparkle-ai-37.lovable.app/favicon.svg",
+          url: "https://prompt-sparkle-ai-37.lovable.app/contact",
+          email: "contentbyali5@gmail.com",
+          telephone: "+92-314-2925435",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Burewala",
+            addressCountry: "PK",
+          },
+          founder: { "@type": "Person", name: "Ali Hamza" },
+        }),
+      },
+    ],
   }),
 });
 

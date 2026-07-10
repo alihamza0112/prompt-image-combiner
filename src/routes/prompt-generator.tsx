@@ -41,6 +41,20 @@ export const Route = createFileRoute("/prompt-generator")({
       { name: "twitter:description", content: "Structured, high-quality AI prompts in 20+ languages." },
     ],
     links: [{ rel: "canonical", href: "https://prompt-sparkle-ai-37.lovable.app/prompt-generator" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
   }),
 });
 
