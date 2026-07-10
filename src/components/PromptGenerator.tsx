@@ -689,14 +689,8 @@ export default function PromptGenerator() {
     }
   };
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(result);
-      toast.success("Copied to clipboard");
-    } catch {
-      toast.error("Copy failed. Please try again.");
-    }
-  };
+  // Copy is handled inline by <CopyButton /> below
+
 
   const handleClear = () => {
     setTitle("");
