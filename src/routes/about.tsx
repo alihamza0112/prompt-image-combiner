@@ -1,16 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Toaster } from "sonner";
-import { Sparkles, Rocket, ShieldCheck, Compass } from "lucide-react";
+import {
+  Sparkles,
+  Target,
+  Eye,
+  Heart,
+  ShieldCheck,
+  Rocket,
+  Zap,
+  Users,
+  Lock,
+} from "lucide-react";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
 import { AdPlaceholder, StickyMobileAd } from "@/components/AdPlaceholder";
 import {
   CardGrid,
   CtaSection,
   FaqSection,
-  LongForm,
   SectionHeading,
+  TimelineSection,
   type Card,
+  type TimelineItem,
 } from "@/components/PageSections";
 
 export const Route = createFileRoute("/about")({
@@ -18,17 +29,9 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About AIXO — The Story Behind Our Free AI Toolkit" },
-      {
-        name: "description",
-        content:
-          "Discover the mission, vision, and privacy commitment behind AIXO — a premium micro SaaS toolkit delivering fast, free, browser-based AI tools for creators worldwide.",
-      },
+      { name: "description", content: "The mission, vision, and privacy commitment behind AIXO — a premium micro SaaS toolkit of fast, free, browser-based AI tools." },
       { property: "og:title", content: "About — AIXO" },
-      {
-        property: "og:description",
-        content:
-          "The story, mission, and roadmap behind AIXO — free, private, browser-based AI tools.",
-      },
+      { property: "og:description", content: "The story, mission, and roadmap behind AIXO." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://prompt-sparkle-ai-37.lovable.app/about" },
       { name: "twitter:card", content: "summary" },
@@ -38,49 +41,43 @@ export const Route = createFileRoute("/about")({
   }),
 });
 
-const PILLARS: Card[] = [
-  {
-    icon: Rocket,
-    title: "Built for Speed",
-    text: "Every AIXO tool loads in under a second and runs instantly in your browser — no queues, no waiting rooms, no throttled free tiers.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Privacy by Default",
-    text: "Your files, prompts, and inputs are processed locally whenever possible. Nothing is stored, tracked, or shared with third parties.",
-  },
-  {
-    icon: Compass,
-    title: "Guided by Users",
-    text: "Every new tool on the AIXO roadmap comes from real user requests. We build what people actually need, not what looks good in a demo.",
-  },
+const MISSION_VISION: Card[] = [
+  { icon: Target, title: "Mission", text: "Make powerful AI utilities feel as simple as opening a webpage — for everyone." },
+  { icon: Eye, title: "Vision", text: "A curated collection of small, sharp tools that respect your attention and time." },
+];
+
+const VALUES: Card[] = [
+  { icon: Zap, title: "Speed First", text: "Instant loads, instant results. No waiting rooms." },
+  { icon: ShieldCheck, title: "Privacy by Default", text: "Client-side processing. Your data never leaves your device." },
+  { icon: Heart, title: "Free Forever", text: "No paywalls around the tools you rely on daily." },
+  { icon: Users, title: "User-Guided", text: "The roadmap is shaped by real requests, not demos." },
+];
+
+const PRIVACY: Card[] = [
+  { icon: Lock, title: "Local Processing", text: "Images and prompts are handled in your browser via Canvas API." },
+  { icon: ShieldCheck, title: "No Accounts", text: "Nothing to sign up for means nothing to leak." },
+  { icon: Eye, title: "No Tracking", text: "No pixels inside tools. No third-party input scraping." },
+];
+
+const FUTURE: Card[] = [
+  { icon: Sparkles, title: "Background Remover", text: "One-click cutouts for photos and product shots." },
+  { icon: Rocket, title: "PDF Toolkit", text: "Merge, split, and compress PDFs — all in your browser." },
+  { icon: Target, title: "AI Writer", text: "Lightweight writing assistant tuned for creators." },
+];
+
+const TIMELINE: TimelineItem[] = [
+  { year: "2025", title: "AIXO is Born", text: "Launched with the AI Image Combiner as the flagship tool." },
+  { year: "2025", title: "Prompt Generator", text: "Added structured prompt building in 20+ languages." },
+  { year: "2026", title: "Design Refresh", text: "Rebuilt with a premium micro SaaS look and glass UI." },
+  { year: "Next", title: "New Tools", text: "Background remover, PDF utility, and AI writer coming soon." },
 ];
 
 const FAQS = [
-  {
-    q: "Who is behind AIXO?",
-    a: "AIXO is designed and maintained by Ali Hamza, an independent developer focused on shipping fast, useful, privacy-first AI utilities for the open web.",
-  },
-  {
-    q: "Is AIXO a company or a solo project?",
-    a: "AIXO is currently an independently operated micro SaaS project. It runs lean, moves fast, and reinvests ad revenue into new tools and infrastructure.",
-  },
-  {
-    q: "Will AIXO ever add paid plans?",
-    a: "The current toolkit will always stay free. If premium features arrive later — like cloud sync or team spaces — they'll be optional add-ons, never a paywall around today's tools.",
-  },
-  {
-    q: "How does AIXO make money?",
-    a: "AIXO is supported by lightweight, non-intrusive display ads through Adstera. That model keeps every tool genuinely free and lets us skip accounts entirely.",
-  },
-  {
-    q: "Can I suggest a new tool?",
-    a: "Absolutely — user requests directly shape the roadmap. Use the contact page to share your idea and it will be reviewed for the next release cycle.",
-  },
-  {
-    q: "Where can I follow updates?",
-    a: "New tools and improvements ship regularly. Check back on the homepage or reach out via contact to be notified when something new goes live.",
-  },
+  { q: "Who is behind AIXO?", a: "AIXO is designed and maintained by Ali Hamza, an independent developer focused on privacy-first AI utilities." },
+  { q: "Is AIXO a company?", a: "It's currently an independently operated micro SaaS project — lean, fast, and reinvesting into new tools." },
+  { q: "Will there be paid plans?", a: "The current tools stay free forever. Premium add-ons like cloud sync may arrive later, but never as a paywall." },
+  { q: "How does AIXO make money?", a: "Lightweight, non-intrusive display ads via Adstera. That's what keeps the tools genuinely free." },
+  { q: "Can I suggest a tool?", a: "Yes — user requests directly shape the roadmap. Use the contact page to send an idea." },
 ];
 
 function AboutPage() {
@@ -116,45 +113,66 @@ function AboutPage() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg"
           >
-            A premium micro SaaS toolkit built to make powerful AI utilities feel effortless — for everyone, everywhere.
+            A premium micro SaaS toolkit built to make AI feel effortless.
           </motion.p>
         </div>
       </section>
 
-      {/* Ad — below hero */}
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="about-below-hero" label="Adstera Ad Placement — Below Hero" />
       </div>
 
-      {/* Pillars */}
-      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="What we stand for"
-          title="Three pillars behind every tool"
-          subtitle="Speed, privacy, and user-guided design shape every decision we make."
-        />
-        <div className="mt-10">
-          <CardGrid cards={PILLARS} />
+      {/* Mission + Vision */}
+      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Mission & Vision" title="Why AIXO exists" />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          {MISSION_VISION.map((c, i) => (
+            <motion.div
+              key={c.title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.45, delay: i * 0.06 }}
+              whileHover={{ y: -5 }}
+              className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.01] p-7 shadow-card backdrop-blur-xl transition-shadow hover:shadow-glow"
+            >
+              <div className="pointer-events-none absolute -top-20 -right-16 h-48 w-48 rounded-full bg-gradient-brand opacity-15 blur-3xl transition-opacity duration-500 group-hover:opacity-30" />
+              <div className="relative">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-brand shadow-glow transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                  <c.icon className="h-5 w-5 text-white" />
+                </span>
+                <h3 className="mt-5 text-xl font-semibold tracking-tight">{c.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.text}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* Long form — Mission / What / Why / Vision / Privacy / Roadmap */}
-      <section className="px-4 py-10 sm:px-6 lg:px-8">
-        <LongForm
-          eyebrow="The full story"
-          title="Our mission, our vision, our promise"
-          paragraphs={[
-            "<strong>Our Mission.</strong> AIXO exists to make powerful AI utilities feel as simple as opening a webpage. Too many creators, students, and small business owners lose hours every week juggling bloated apps, waiting on server queues, or bumping into paywalls that block basic workflows. Our mission is to remove that friction — to deliver tools that load instantly, work everywhere, and never ask for a credit card just to try them.",
-            "<strong>What AIXO Is.</strong> AIXO is a growing collection of premium, browser-based AI tools packaged as a single, cohesive micro SaaS toolkit. Today the suite includes the <strong>AI Image Combiner</strong> — a fast way to merge unlimited photos into a single organized grid — and the <strong>AI Prompt Generator</strong> — a structured builder that turns rough ideas into expert-level prompts for ChatGPT, Claude, Gemini, and Midjourney. Every tool shares the same modern dark UI, smooth animations, and privacy-first architecture, so once you learn one you already know the rest.",
-            "<strong>Why We Built It.</strong> The AI ecosystem is exploding, but most of the day-to-day utilities creators actually need are locked inside expensive subscriptions or scattered across a dozen half-broken websites. We wanted a single, trustworthy home where a freelancer could combine client screenshots, a teacher could prepare a lesson prompt, and a marketer could draft a campaign brief — all in the same afternoon, without accounts or downloads. AIXO started as a personal toolkit and grew into a public one because the need was universal.",
-            "<strong>Our Vision.</strong> We believe the next decade of the web will be shaped by lightweight, focused tools that respect the user's attention. Instead of one giant AI dashboard trying to do everything, AIXO will remain a curated collection of small, sharp utilities — each one solving a real problem beautifully. Long term we want AIXO to be the first place people open when they think, \"there has to be a faster way to do this.\"",
-            "<strong>Privacy Commitment.</strong> Privacy is not a feature we bolt on — it's the foundation. Wherever technically possible, AIXO processes your data directly in the browser using the Canvas API and other client-side technologies. Your images, prompts, and files never touch our servers unless you explicitly send them. There are no tracking pixels inside the tools, no third-party analytics scraping your inputs, and no accounts to breach because we never ask you to create one. What happens in your browser stays in your browser.",
-            "<strong>Future Roadmap.</strong> The roadmap ahead is ambitious and community-driven. Planned releases include a background remover, a smart PDF splitter and merger, a text-to-image mockup generator, a lightweight AI writing assistant, and offline-capable versions of the current tools for use on planes, trains, and unreliable connections. We're also expanding multilingual support so every tool works fluently in 20+ languages. Every item on the roadmap comes from real user feedback — if you have a request, the contact page is the fastest way to get your idea in front of us.",
-          ]}
-        />
+      {/* Our Values */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Our values" title="Four principles guide every build" />
+        <div className="mt-10"><CardGrid cards={VALUES} cols={4} /></div>
       </section>
 
-      {/* Ad — above FAQ */}
+      {/* Privacy */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Privacy" title="Privacy is the foundation" />
+        <div className="mt-10"><CardGrid cards={PRIVACY} /></div>
+      </section>
+
+      {/* Future */}
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Future" title="What's coming next" />
+        <div className="mt-10"><CardGrid cards={FUTURE} /></div>
+      </section>
+
+      {/* Timeline */}
+      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="Timeline" title="The AIXO journey" />
+        <div className="mt-10"><TimelineSection items={TIMELINE} /></div>
+      </section>
+
       <div className="mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
         <AdPlaceholder size="banner" slotId="about-pre-faq" label="Adstera Ad Placement — Above FAQ" />
       </div>
@@ -163,7 +181,7 @@ function AboutPage() {
 
       <CtaSection
         title="Start using AIXO today"
-        subtitle="Jump into the toolkit — every tool is free, private, and ready in your browser."
+        subtitle="Every tool is free, private, and ready in your browser."
         primary={{ label: "Open Image Combiner", to: "/image-combiner" }}
         secondary={{ label: "Try Prompt Generator", to: "/prompt-generator" }}
       />
