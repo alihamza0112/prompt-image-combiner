@@ -2,9 +2,8 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Toaster, toast } from "sonner";
-import { Mail, MessageCircle, Github, MapPin, User, Send } from "lucide-react";
+import { Mail, MessageCircle, Github, MapPin, User, Send, Sparkles } from "lucide-react";
 import SiteHeader, { SiteFooter } from "@/components/SiteHeader";
-import { AdPlaceholder } from "@/components/AdPlaceholder";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/contact")({
@@ -70,9 +69,7 @@ function ContactPage() {
       return;
     }
     setSending(true);
-    const body = encodeURIComponent(
-      `From: ${name} <${email}>\n\n${message}`
-    );
+    const body = encodeURIComponent(`From: ${name} <${email}>\n\n${message}`);
     const subj = encodeURIComponent(subject || `New message from ${name}`);
     window.location.href = `mailto:contentbyali5@gmail.com?subject=${subj}&body=${body}`;
     setTimeout(() => {
@@ -87,83 +84,99 @@ function ContactPage() {
       <Toaster position="top-center" richColors theme="dark" />
       <SiteHeader />
 
-      <section className="relative overflow-hidden pt-16 pb-10 sm:pt-20">
-        <div className="pointer-events-none absolute left-[-10%] top-[-10%] h-[380px] w-[380px] rounded-full bg-[oklch(0.7_0.2_265)] opacity-25 blur-3xl animate-float-slow" />
-        <div className="pointer-events-none absolute right-[-10%] top-16 h-[420px] w-[420px] rounded-full bg-[oklch(0.72_0.2_305)] opacity-25 blur-3xl animate-float-slower" />
+      {/* Hero */}
+      <section className="relative overflow-hidden pt-16 pb-8 sm:pt-24">
+        <div className="pointer-events-none absolute left-[-15%] top-[-10%] h-[460px] w-[460px] rounded-full bg-[oklch(0.7_0.2_265)] opacity-30 blur-3xl animate-float-slow" />
+        <div className="pointer-events-none absolute right-[-15%] top-10 h-[500px] w-[500px] rounded-full bg-[oklch(0.72_0.2_305)] opacity-30 blur-3xl animate-float-slower" />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-muted-foreground backdrop-blur"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-[color:var(--brand)]" /> Let's talk
+          </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-4xl font-bold tracking-tight sm:text-5xl"
+            transition={{ duration: 0.55 }}
+            className="mt-5 text-5xl font-bold tracking-tight sm:text-6xl"
           >
             Get in <span className="text-gradient-brand">touch</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-auto mt-4 max-w-xl text-muted-foreground"
+            transition={{ duration: 0.55, delay: 0.1 }}
+            className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg"
           >
-            I build simple AI-powered micro SaaS tools that help creators, students, freelancers, marketers, and professionals save time and work more efficiently.
+            Have a question, an idea, or just want to say hi? I'd love to hear from you — replies usually go out within 24 hours.
           </motion.p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-          {/* Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-2 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-card backdrop-blur"
-          >
-            <h2 className="text-lg font-semibold tracking-tight">Contact details</h2>
-            <ul className="mt-5 space-y-4">
-              {INFO.map((item) => (
-                <li key={item.label} className="flex items-start gap-3">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-gradient-brand shadow-glow">
-                    <item.icon className="h-4 w-4 text-white" />
-                  </span>
-                  <div className="min-w-0">
-                    <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                      {item.label}
-                    </div>
-                    {item.href ? (
-                      <a
-                        href={item.href}
-                        target={item.href.startsWith("http") ? "_blank" : undefined}
-                        rel="noreferrer"
-                        className="block truncate text-sm font-medium text-foreground hover:text-[color:var(--brand)]"
-                      >
-                        {item.value}
-                      </a>
-                    ) : (
-                      <div className="text-sm font-medium text-foreground">{item.value}</div>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+      {/* Cards */}
+      <section className="mx-auto max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {INFO.map((item, i) => {
+            const Card = (
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                whileHover={{ y: -4 }}
+                className="group h-full rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.05] to-white/[0.01] p-4 shadow-card backdrop-blur transition-shadow hover:shadow-glow"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-brand shadow-glow transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                  <item.icon className="h-4 w-4 text-white" />
+                </span>
+                <div className="mt-3 text-[11px] uppercase tracking-wide text-muted-foreground">
+                  {item.label}
+                </div>
+                <div className="mt-1 truncate text-sm font-medium text-foreground">
+                  {item.value}
+                </div>
+              </motion.div>
+            );
+            return item.href ? (
+              <a
+                key={item.label}
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel="noreferrer"
+                className="block"
+              >
+                {Card}
+              </a>
+            ) : (
+              <div key={item.label}>{Card}</div>
+            );
+          })}
+        </div>
+      </section>
 
-            <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">About:</span> I build simple AI-powered micro SaaS tools that help creators, students, freelancers, marketers, and professionals save time and work more efficiently.
-            </div>
-          </motion.div>
+      {/* Form */}
+      <section className="mx-auto max-w-3xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+        <motion.form
+          onSubmit={onSubmit}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.01] p-6 shadow-card backdrop-blur-xl sm:p-8"
+        >
+          <div className="pointer-events-none absolute -top-24 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-gradient-brand opacity-20 blur-3xl" />
+          <div className="relative">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              Send a <span className="text-gradient-brand">message</span>
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Fill in the form and it'll open your email client, prefilled.
+            </p>
 
-          {/* Form */}
-          <motion.form
-            onSubmit={onSubmit}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className="lg:col-span-3 rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-6 shadow-card backdrop-blur"
-          >
-            <h2 className="text-lg font-semibold tracking-tight">Send a message</h2>
-            <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Name" name="name" placeholder="Your name" required />
               <Field label="Email" name="email" type="email" placeholder="you@example.com" required />
               <div className="sm:col-span-2">
@@ -178,26 +191,24 @@ function ContactPage() {
                   required
                   rows={6}
                   placeholder="Write your message…"
-                  className="w-full resize-y rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  className="w-full resize-y rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition focus:border-white/20 focus:bg-white/[0.05] focus:ring-2 focus:ring-primary/30"
                 />
               </div>
             </div>
-            <div className="mt-6 flex items-center justify-end">
+
+            <div className="mt-6 flex justify-end">
               <Button
                 type="submit"
                 disabled={sending}
-                className="bg-gradient-brand text-white shadow-glow transition-all hover:opacity-95 active:scale-[0.97]"
+                size="lg"
+                className="h-12 px-6 bg-gradient-brand text-white shadow-glow transition-all hover:opacity-95 hover:scale-[1.02] active:scale-[0.97]"
               >
-                <Send className="mr-1.5 h-4 w-4" />
-                {sending ? "Sending…" : "Send message"}
+                <Send className="mr-2 h-4 w-4" />
+                {sending ? "Sending…" : "Send Message"}
               </Button>
             </div>
-          </motion.form>
-        </div>
-
-        <div className="mt-10">
-          <AdPlaceholder size="leaderboard" slotId="contact-bottom" label="Adstera Ad Placement — Contact" />
-        </div>
+          </div>
+        </motion.form>
       </section>
 
       <SiteFooter />
@@ -228,7 +239,7 @@ function Field({
         name={name}
         required={required}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+        className="w-full rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none transition focus:border-white/20 focus:bg-white/[0.05] focus:ring-2 focus:ring-primary/30"
       />
     </div>
   );
